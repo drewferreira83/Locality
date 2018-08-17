@@ -1,24 +1,52 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13122.16" systemVersion="17A277" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="c6R-KF-zVg">
+    <device id="retina5_9" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13104.12"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--View Controller-->
-        <scene sceneID="tne-QT-ifu">
+        <!--Locality-->
+        <scene sceneID="3Km-ZS-VLf">
             <objects>
-                <viewController id="BYZ-38-t0r" customClass="ViewController" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                <viewController title="Locality" id="c6R-KF-zVg" customClass="MapViewController" customModule="Locality" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="exc-Oi-Mgr">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                        <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
+                        <subviews>
+                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" rotateEnabled="NO" showsTraffic="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Yf8-G8-hko">
+                                <rect key="frame" x="0.0" y="44" width="375" height="734"/>
+                            </mapView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ZAi-zC-ZV2">
+                                <rect key="frame" x="164" y="748" width="47" height="30"/>
+                                <state key="normal" title="Reload"/>
+                                <connections>
+                                    <action selector="reload:" destination="c6R-KF-zVg" eventType="touchUpInside" id="rG0-jU-Gch"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="Yf8-G8-hko" firstAttribute="leading" secondItem="exc-Oi-Mgr" secondAttribute="leading" id="5eX-bg-Y4S"/>
+                            <constraint firstItem="Yf8-G8-hko" firstAttribute="bottom" secondItem="Ae4-Kd-fFp" secondAttribute="bottom" id="Ltf-eC-mCY"/>
+                            <constraint firstItem="ZAi-zC-ZV2" firstAttribute="bottom" secondItem="Yf8-G8-hko" secondAttribute="bottom" id="RuU-fB-gjP"/>
+                            <constraint firstAttribute="trailing" secondItem="Yf8-G8-hko" secondAttribute="trailing" id="lA2-d6-srO"/>
+                            <constraint firstItem="ZAi-zC-ZV2" firstAttribute="centerX" secondItem="Yf8-G8-hko" secondAttribute="centerX" id="nye-CX-kdM"/>
+                            <constraint firstItem="Yf8-G8-hko" firstAttribute="top" secondItem="Ae4-Kd-fFp" secondAttribute="top" id="vz1-kB-6Cg"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="Ae4-Kd-fFp"/>
                     </view>
+                    <connections>
+                        <outlet property="mapView" destination="Yf8-G8-hko" id="fKl-uR-JTd"/>
+                    </connections>
                 </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Qyq-hI-bDk" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
+            <point key="canvasLocation" x="21.600000000000001" y="193.85307346326837"/>
         </scene>
     </scenes>
 </document>
