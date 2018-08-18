@@ -9,7 +9,7 @@
 import UIKit
 import MapKit
 
-class MapViewController: UIViewController, LocationAccessDelegate {
+class MapViewController: UIViewController, LocationAccessDelegate, MBTAListener {
     @IBOutlet weak var mapView: MKMapView!
     @IBAction func reload(_ sender: Any) {
         LocationService.share.update()
@@ -20,7 +20,7 @@ class MapViewController: UIViewController, LocationAccessDelegate {
         // Do any additional setup after loading the view, typically from a nib.
         
         LocationService.share.delegate = self
-        update(location: LocationService.share.here)
+        update(coordinate: LocationService.share.here)
     }
 
     override func didReceiveMemoryWarning() {
@@ -36,11 +36,25 @@ class MapViewController: UIViewController, LocationAccessDelegate {
         mapView.showsUserLocation = allowed
     }
     
-    func update( location: CLLocation ) {
+    func update( coordinate: CLLocationCoordinate2D ) {
         let span = MKCoordinateSpanMake(0.005, 0.005)
-        let region = MKCoordinateRegionMake(location.coordinate, span)
+        let region = MKCoordinateRegionMake(coordinate, span)
 
         mapView.setRegion(region, animated: true)
+        
+        let package = Package(kind: .stopsByLocation, data: coordinate)
+        if let error = MBTAHandler.share.deliver(package: package) {
+            print( "Error: \(error)")
+        }
+    }
+    
+    func receive(package: Package) {
+        switch package.kind {
+        case .stopsByLocation:
+            print( package )
+        case .stop:
+            print( package )
+        }
     }
 }
 

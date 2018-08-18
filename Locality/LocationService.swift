@@ -13,7 +13,7 @@ protocol LocationAccessDelegate {
     // Called when access has potentially changed
     // The MapViewController is the expected delegate and will set mapView.showsUserLocation based on settings and access.
     func access( allowed: Bool )
-    func update( location: CLLocation)
+    func update( coordinate: CLLocationCoordinate2D)
 }
 
 //  Current priorities:
@@ -31,8 +31,8 @@ class LocationService: NSObject, CLLocationManagerDelegate {
     fileprivate var trigger = LocationTrigger.never
     
     public var delegate: LocationAccessDelegate?
-    public var here: CLLocation {
-        get { return locMgr.location ?? LocationService.defaultLocation }
+    public var here: CLLocationCoordinate2D {
+        get { return locMgr.location?.coordinate ?? LocationService.defaultLocation.coordinate }
     }
 
     public var isEnabled: Bool {
@@ -100,7 +100,7 @@ class LocationService: NSObject, CLLocationManagerDelegate {
         // Received updated location.
         userLocation = locations[0]
         locMgr.stopUpdatingLocation()
-        delegate?.update(location: userLocation)
+        delegate?.update(coordinate: userLocation.coordinate)
     }
     
     func update() {

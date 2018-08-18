@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3A65513C212716D0007EF78B /* MBTAHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A65513B212716D0007EF78B /* MBTAHandler.swift */; };
+		3A65513F21271A96007EF78B /* MURL.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A65513E21271A96007EF78B /* MURL.swift */; };
+		3A65514121271CD6007EF78B /* Stop.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A65514021271CD6007EF78B /* Stop.swift */; };
+		3AB902ED212865090042284C /* Package.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AB902EC212865090042284C /* Package.swift */; };
 		6A263A822124655400B1D470 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A263A812124655400B1D470 /* AppDelegate.swift */; };
 		6A263A842124655400B1D470 /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A263A832124655400B1D470 /* MapViewController.swift */; };
 		6A263A872124655400B1D470 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6A263A852124655400B1D470 /* Main.storyboard */; };
@@ -17,6 +21,10 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		3A65513B212716D0007EF78B /* MBTAHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MBTAHandler.swift; sourceTree = "<group>"; };
+		3A65513E21271A96007EF78B /* MURL.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MURL.swift; sourceTree = "<group>"; };
+		3A65514021271CD6007EF78B /* Stop.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Stop.swift; sourceTree = "<group>"; };
+		3AB902EC212865090042284C /* Package.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Package.swift; sourceTree = "<group>"; };
 		6A263A7E2124655400B1D470 /* Locality.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Locality.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6A263A812124655400B1D470 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		6A263A832124655400B1D470 /* MapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
@@ -40,9 +48,21 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		3A65513D212718E4007EF78B /* MBTAKit */ = {
+			isa = PBXGroup;
+			children = (
+				3A65513B212716D0007EF78B /* MBTAHandler.swift */,
+				3A65513E21271A96007EF78B /* MURL.swift */,
+				3A65514021271CD6007EF78B /* Stop.swift */,
+				3AB902EC212865090042284C /* Package.swift */,
+			);
+			path = MBTAKit;
+			sourceTree = "<group>";
+		};
 		6A263A752124655400B1D470 = {
 			isa = PBXGroup;
 			children = (
+				3A65513D212718E4007EF78B /* MBTAKit */,
 				6A263A802124655400B1D470 /* Locality */,
 				6A263A7F2124655400B1D470 /* Products */,
 				6A263A9521246B9400B1D470 /* Frameworks */,
@@ -151,8 +171,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				6A263A842124655400B1D470 /* MapViewController.swift in Sources */,
+				3AB902ED212865090042284C /* Package.swift in Sources */,
 				6A263A942124688200B1D470 /* LocationService.swift in Sources */,
+				3A65513F21271A96007EF78B /* MURL.swift in Sources */,
+				3A65513C212716D0007EF78B /* MBTAHandler.swift in Sources */,
 				6A263A822124655400B1D470 /* AppDelegate.swift in Sources */,
+				3A65514121271CD6007EF78B /* Stop.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
