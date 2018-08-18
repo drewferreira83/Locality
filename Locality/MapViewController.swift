@@ -20,7 +20,7 @@ class MapViewController: UIViewController, LocationAccessDelegate, MBTAListener 
         // Do any additional setup after loading the view, typically from a nib.
         
         LocationService.share.delegate = self
-        update(coordinate: LocationService.share.here)
+        //update(coordinate: LocationService.share.here)
     }
 
     override func didReceiveMemoryWarning() {
@@ -43,8 +43,8 @@ class MapViewController: UIViewController, LocationAccessDelegate, MBTAListener 
         mapView.setRegion(region, animated: true)
         
         let package = Package(kind: .stopsByLocation, data: coordinate)
-        if let error = MBTAHandler.share.deliver(package: package) {
-            print( "Error: \(error)")
+        if !MBTAHandler.share.deliver(package: package) {
+            print( "Delivery failed.")
         }
     }
     

@@ -47,6 +47,7 @@ class LocationService: NSObject, CLLocationManagerDelegate {
     }
     
     fileprivate override init() {
+        print("***LocationService.init()")
         userLocation = locMgr.location
 
         super.init()
@@ -86,6 +87,7 @@ class LocationService: NSObject, CLLocationManagerDelegate {
     //
     //  This is always called when the app starts and when it regains active status.
     func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
+        print( "***LocationService didChangeAuthorization")
         switch status {
         case .authorizedAlways, .authorizedWhenInUse:
             update()
@@ -98,15 +100,17 @@ class LocationService: NSObject, CLLocationManagerDelegate {
     //  DELEGATE METHOD
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         // Received updated location.
+        print("***LocationService received updated location.")
         userLocation = locations[0]
-        locMgr.stopUpdatingLocation()
         delegate?.update(coordinate: userLocation.coordinate)
-    }
+   }
     
     func update() {
+        print( "***LocationService update.")
         // Request latest location, if permitted.
         if  isEnabled {
-            locMgr.startUpdatingLocation()
+            // TODO: This takes a long time in testing...
+            locMgr.requestLocation()
         }
     }
     
