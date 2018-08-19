@@ -19,7 +19,7 @@ class MURL {
     static let URL_HEAD = "https://api-v3.mbta.com/"
     static let MBTA_KEY = "?api_key=0de754c34a1445aeac7cbc2c385ef0ae"
     
-    static func makeURL(package: Package) -> String? {
+    static func makeURL(package: Package) -> URL? {
         var baseString: String = URL_HEAD
         
         switch ( package.kind )
@@ -44,8 +44,20 @@ class MURL {
             }
             print( "ERROR: Stop requires a StopID string")
             return nil
+            
+        default:
+            print( "Don't know how to make URL for '\(package.kind)")
+            return nil
         }
         
-        return baseString
+        guard let url = URL( string: baseString ) else {
+            print( "Failed to create URL from \(baseString)")
+            return nil
+        }
+        
+        package.url = url
+        
+        return  url
+        
     }
 }

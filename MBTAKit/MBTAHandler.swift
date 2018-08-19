@@ -19,10 +19,15 @@ public protocol MBTAListener {
     func receive(package: Package) -> Void
 }
 
+
+
 open class MBTAHandler: CustomStringConvertible {
     public static let share = MBTAHandler()
     
+    fileprivate let decoder = JSONDecoder()
     var listener: MBTAListener?
+    
+    var activePackages = PackageTracker()
     
     private init() {
     
@@ -38,12 +43,13 @@ open class MBTAHandler: CustomStringConvertible {
     
     // Main App Access point
     public func deliver(package: Package) -> Bool {
-        if let urlString = MURL.makeURL(package: package) {
-            guard let url = URL( string: urlString )  else {
-                fatalError( "MBTAHandler: Failed to generate legal URL [[[  \(urlString)  ]]]")
-            }
-            let task = URLSession.shared.dataTask(with: url, completionHandler: handler)
-            task.resume()
+        if let url = MURL.makeURL(package: package) {
+            // Create and issue request.
+            URLSession.shared.dataTask(with: url, completionHandler: newStyleHandler).resume()
+
+            // Update and track package.
+            package.issued = Date()
+            activePackages.track(package: package)
             return( true )
         }
         
@@ -51,68 +57,35 @@ open class MBTAHandler: CustomStringConvertible {
         return false
     }
     
-    fileprivate func handler( _ data: Data?, response: URLResponse?, error: Error? ) -> Void {
-        if error != nil {
-            print("handler got error: \(error!.localizedDescription)")
-        } else if data == nil {
-            print( "handler got no data")
-        } else {
-            print( "urlResponse = \(String(describing: response))")
+    fileprivate func newStyleHandler( _ data: Data?, response: URLResponse?, error: Error? ) -> Void {
+        if listener == nil {
+            print( "No one is listening to handler" )
         }
-    }
-    /*
-    // Liason to realtime MBTA server
-    fileprivate func issueQuery( _ type: QType, urlString: String,
-                                 completionHandler: @escaping (_ data: Data?, _ response: URLResponse?, _ error: Error? ) -> Void) -> Int {
-        // Abort if we have a malformed URL.
-        guard let validURL = URL( string: urlString ) else {
-            fatalError("MBTAHandler: Illegal query '\(urlString)'." )
+        if let error = error {
+            print( "Handler got error \(error.localizedDescription)")
+        }
+        guard let data = data else {
+            print( "No Data in handler?")
+            return
+        }
+        guard let url = response?.url else {
+            print( "Can't find response url in handler?" )
+            return
         }
         
-        let ticket = QueryTicket( type: type )
-        activeQueries[ urlString ] = ticket
+        let mbtaResult = try! decoder.decode(MBTAResult.self, from: data)
         
-        qprint( "\(ticket.id)> Sent \(type.rawValue)" )
-        
-        let task = URLSession.shared.dataTask( with: validURL, completionHandler: completionHandler )
-        countOut( urlString )
-        enableTimeout()
-        task.resume()
-        
-        return ticket.id
-    }
-     
-    
-    // Sample handler
-    fileprivate func alertHeadersHandler( _ data: Data?, response: URLResponse?, error: Error? ) -> Void {
-        var errorString: String?
-        var alertHeaders = [AlertHeader]()
-        
-        if error != nil {
-            errorString = error!.localizedDescription
-        } else if data == nil {
-            errorString = "Server returned no data for alertHeaders by Route."
-        } else {
-            let result = genericProcessing(data: data!)
-            
-            if let parsedDict = result.dictionary {
-                if let headerArray = parsedDict[ KEYS.ALERT_HEADERS ] as? NSArray {
-                    for item in headerArray {
-                        if let headerDict = item as? NSDictionary {
-                            let newHeader = AlertHeader(attributes: headerDict)
-                            alertHeaders.append(newHeader)
-                        }
-                    }
-                }
-            } else {
-                errorString = result.error
-            }
+        // Look up matching package
+        guard let package = activePackages.find(matchingUrl: url, andRemove: true ) else {
+            print( "Handler got unexpeected response! \(url)")
+            return
         }
+
+        package.received = Date()
+        package.response = mbtaResult
+        listener?.receive(package: package)
         
-        
-        sendPackage( MBTAPackage( name: response?.url?.absoluteString, qType: .AlertHeadersByRoute, data: alertHeaders, error: errorString))
+        activePackages.remove(package: package)
     }
-     
-     */
     
 }

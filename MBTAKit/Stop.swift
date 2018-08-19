@@ -8,10 +8,49 @@
 
 import Foundation
 
-public struct Stop {
-    public var id: String
+public struct MBTAResult: Decodable {
+    let data: [Stop]
+    //let jsonapi: String
     
-    public var address: String = ""
+    enum CodingKeys: String, CodingKey {
+        case data
+    }
+}
+
+public struct Stop: Decodable {
+    // Specific to Stop
+    public struct Attributes: Decodable {
+        public let address: String?
+        public let description: String?
+        public let latitude: Double
+        public let location_type: Int
+        public let longitude: Double
+        public let name: String
+        public let platform_code: String?
+        public let platform_name: String?
+        public let wheelchair_boarding: Int
+    }
+    
+    public struct Relationships: Decodable {
+        public let child_stops: [Stop]?
+        public let facilities: [String:String]
+        public let parent_station: [String:String?]
+    }
+    
+    enum CodingKeys: CodingKey {
+        case id
+        case attributes
+        case type
+    }
+    
+    public let attributes: Attributes
+    public let id: String
+    //public let relationships: Relationships
+    public let type: String
+    
+    
+    
+/*    public var address: String = ""
     public var description: String = ""
     public var longitude: Double = 0.0
     public var locationType: Int = 0
@@ -20,7 +59,6 @@ public struct Stop {
     public var platformCode: String = ""
     public var platformName: String = ""
     public var wheelchairBoarding: Int = 0
-    
     public var childStops: [Stop] = []
     public var parentStation: String = ""
     
@@ -57,7 +95,7 @@ public struct Stop {
         "JFK/UMASS Braintree": "JFK/UMASS",
         ", Boston": ""                          // Ferry terminals.  Don't remove ", Hull" because that's important info.
     ]
-    
+    */
 }
 
 

@@ -21,6 +21,12 @@ class MapViewController: UIViewController, LocationAccessDelegate, MBTAListener 
         
         LocationService.share.delegate = self
         //update(coordinate: LocationService.share.here)
+        MBTAHandler.share.register(listener: self)
+        let package = Package(kind: .stop, data: "place-lech")
+        if !MBTAHandler.share.deliver(package: package) {
+            print( "Delivery failed.")
+        }
+        
     }
 
     override func didReceiveMemoryWarning() {
@@ -42,18 +48,18 @@ class MapViewController: UIViewController, LocationAccessDelegate, MBTAListener 
 
         mapView.setRegion(region, animated: true)
         
-        let package = Package(kind: .stopsByLocation, data: coordinate)
-        if !MBTAHandler.share.deliver(package: package) {
-            print( "Delivery failed.")
-        }
-    }
+        //let package = Package(kind: .stopsByLocation, data: coordinate)
+   }
     
     func receive(package: Package) {
+        print( "Got a package!")
         switch package.kind {
         case .stopsByLocation:
             print( package )
         case .stop:
             print( package )
+        default:
+            print( "Don't know what to do with package \(package.kind)")
         }
     }
 }
