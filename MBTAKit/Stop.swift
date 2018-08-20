@@ -8,8 +8,9 @@
 
 import Foundation
 
-public struct MBTAResult: Decodable {
-    let data: [Stop]
+// Wrapper struct to decode JSON returned from a /stops call.
+struct StopsData: Decodable {
+    let data: [Stop]?
     //let jsonapi: String
     
     enum CodingKeys: String, CodingKey {
@@ -18,7 +19,6 @@ public struct MBTAResult: Decodable {
 }
 
 public struct Stop: Decodable {
-    // Specific to Stop
     public struct Attributes: Decodable {
         public let address: String?
         public let description: String?
@@ -31,6 +31,7 @@ public struct Stop: Decodable {
         public let wheelchair_boarding: Int
     }
     
+    // CURRENTLY IGNORED
     public struct Relationships: Decodable {
         public let child_stops: [Stop]?
         public let facilities: [String:String]
@@ -45,31 +46,12 @@ public struct Stop: Decodable {
     
     public let attributes: Attributes
     public let id: String
-    //public let relationships: Relationships
     public let type: String
-    
-    
-    
-/*    public var address: String = ""
-    public var description: String = ""
-    public var longitude: Double = 0.0
-    public var locationType: Int = 0
-    public var latitude: Double = 0.0
-    public var name: String = ""
-    public var platformCode: String = ""
-    public var platformName: String = ""
-    public var wheelchairBoarding: Int = 0
-    public var childStops: [Stop] = []
-    public var parentStation: String = ""
-    
-    
-    init( id: String, name: String) {
-        self.id = id
-        self.name = name
-    }
-    
+    //public let relationships: Relationships
+
+    // Full name is retained in attributes.name
     public var shortName: String {
-        var workingString = name
+        var workingString = attributes.name
         
         for word in Stop.abbrevs.keys {
             if let replacement = Stop.abbrevs[ word ] {
@@ -95,10 +77,6 @@ public struct Stop: Decodable {
         "JFK/UMASS Braintree": "JFK/UMASS",
         ", Boston": ""                          // Ferry terminals.  Don't remove ", Hull" because that's important info.
     ]
-    */
+    
 }
 
-
-func ==(lhs: Stop, rhs:Stop) -> Bool {
-    return lhs.id == rhs.id
-}

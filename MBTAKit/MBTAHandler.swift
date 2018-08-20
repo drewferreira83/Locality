@@ -26,7 +26,6 @@ open class MBTAHandler: CustomStringConvertible {
     
     fileprivate let decoder = JSONDecoder()
     var listener: MBTAListener?
-    
     var activePackages = PackageTracker()
     
     private init() {
@@ -42,7 +41,12 @@ open class MBTAHandler: CustomStringConvertible {
     }
     
     // Main App Access point
-    public func deliver(package: Package) -> Bool {
+    @discardableResult public func deliver(package: Package) -> Bool {
+        guard listener != nil else {
+            fatalError( "No one is listening.")
+        }
+        
+
         if let url = MURL.makeURL(package: package) {
             // Create and issue request.
             URLSession.shared.dataTask(with: url, completionHandler: newStyleHandler).resume()
@@ -58,11 +62,12 @@ open class MBTAHandler: CustomStringConvertible {
     }
     
     fileprivate func newStyleHandler( _ data: Data?, response: URLResponse?, error: Error? ) -> Void {
-        if listener == nil {
-            print( "No one is listening to handler" )
+        guard listener != nil else {
+            fatalError( "No one is listening to handler" )
         }
-        if let error = error {
-            print( "Handler got error \(error.localizedDescription)")
+        guard error == nil else {
+            print( "Handler got error \(error!.localizedDescription)")
+            return
         }
         guard let data = data else {
             print( "No Data in handler?")
@@ -73,8 +78,6 @@ open class MBTAHandler: CustomStringConvertible {
             return
         }
         
-        let mbtaResult = try! decoder.decode(MBTAResult.self, from: data)
-        
         // Look up matching package
         guard let package = activePackages.find(matchingUrl: url, andRemove: true ) else {
             print( "Handler got unexpeected response! \(url)")
@@ -82,10 +85,17 @@ open class MBTAHandler: CustomStringConvertible {
         }
 
         package.received = Date()
-        package.response = mbtaResult
-        listener?.receive(package: package)
         
-        activePackages.remove(package: package)
+        switch (package.kind) {
+        case .stops:
+            let mbtaResult = try! decoder.decode(StopsData.self, from: data)
+            package.response = mbtaResult.data
+            
+        default:
+            fatalError( "Don't know how to handle package \(package.kind)")
+        }
+
+        listener!.receive(package: package)
     }
     
 }

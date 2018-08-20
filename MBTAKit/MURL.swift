@@ -24,25 +24,23 @@ class MURL {
         
         switch ( package.kind )
         {
-        case .stopsByLocation:
-            // Data must be a CLLocation
+        case .stops:
+            // If the data is a coordinate
             if let coordinate = package.data as? CLLocationCoordinate2D {
                 baseString.append( "stops?")
                 baseString.append( MBTA_KEY )
                 baseString.append( "&filter[latitude]=\(coordinate.latitude)&filter[longitude]=\(coordinate.longitude)" )
                 break
             }
-            print( "ERROR: Stops By Location require a CLLocationCoordinate2D" )
-            return nil
-            
-        case .stop:
+
+            // If the data is an stop ID
             if let stopID = package.data as? String {
                 baseString.append( "stops?" )
                 baseString.append( MBTA_KEY)
                 baseString.append( "&filter[id]=\(stopID)")
                 break
             }
-            print( "ERROR: Stop requires a StopID string")
+            print( "ERROR: Stop requires a StopID string or CLLocationCoordinate2D")
             return nil
             
         default:

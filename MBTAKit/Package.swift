@@ -8,14 +8,33 @@
 
 import Foundation
 
-open class Package: CustomStringConvertible {
+/*
+ *  .stops
+ *    DATA:
+ *      String, Stop ID.
+ *      CLLocationCoordinate
+ *    Returns: Array of Stops
+ *
+ *  .
+ 
+ */
+
+open class Package: Hashable, CustomStringConvertible {
     static private var counter = 0
     
+    public var hashValue: Int {
+        return id
+    }
+    
     public enum Kind: String {
-        case stopsByLocation = "Stops by location"
-        case stop = "Stop"
-        
-        case error = "Error"
+        case alert
+        case predictions
+        case schedules
+        case stops
+        case trips
+        case vehicles
+
+        case error
     }
     
     public let kind: Kind
@@ -39,11 +58,19 @@ open class Package: CustomStringConvertible {
     public var description: String {
         return( "Package: \(kind)")
     }
+
+    // The URL is used to distinguish packages
+    static public func == ( lhs: Package, rhs: Package ) -> Bool {
+        return lhs.url == rhs.url
+    }
+    
+    static public func != (lhs: Package, rhs: Package) -> Bool {
+        return lhs.url != rhs.url
+    }
 }
 
-
 class PackageTracker: CustomStringConvertible {
-    private var packages = [Package]()
+    private var packages = Set<Package>()
     
     var count: Int {
         return packages.count
@@ -53,8 +80,12 @@ class PackageTracker: CustomStringConvertible {
         return packages.isEmpty
     }
     
+    func contains( package: Package ) -> Bool {
+        return packages.contains( package)
+    }
+    
     func track( package: Package ) {
-        packages.append( package )
+        packages.insert(package )
     }
     
     func find( matchingUrl: URL, andRemove: Bool = false ) -> Package? {
@@ -71,15 +102,7 @@ class PackageTracker: CustomStringConvertible {
     }
     
     func remove( package: Package ) {
-        if let index = indexOf(package: package) {
-            packages.remove(at: index)
-        }
-    }
-    
-    func remove( matchingUrl: URL ) {
-        if let index = indexOf(url: matchingUrl) {
-            packages.remove(at: index)
-        }
+        packages.remove( package)
     }
     
     func removeAll() {
@@ -88,24 +111,5 @@ class PackageTracker: CustomStringConvertible {
     
     public var description: String {
         return "v3.0"
-    }
-    
-    //  Functions to support array indexing.
-    private func indexOf( package: Package ) -> Int? {
-        for i in 0..<packages.count {
-            if packages[i].url == package.url {
-                return i
-            }
-        }
-        return nil
-    }
-    
-    private func indexOf( url: URL ) -> Int? {
-        for i in 0..<packages.count {
-            if packages[i].url == url {
-                return i
-            }
-        }
-        return nil
     }
 }
