@@ -15,25 +15,17 @@
 import Foundation
 import MapKit
 
-public protocol MBTAListener {
-    func receive(package: Package) -> Void
+public protocol Listener {
+    func receive(query: Query) -> Void
 }
 
-
-
-open class MBTAHandler: CustomStringConvertible {
-    public static let share = MBTAHandler()
-    
+open class Handler: CustomStringConvertible {
     fileprivate let decoder = JSONDecoder()
-    var listener: MBTAListener?
-    var activePackages = PackageTracker()
+    var listener: Listener!
+    var activeQueries = QueryTracker()
     
-    private init() {
-    
-    }
-    
-    public func register( listener: MBTAListener) {
-        self.listener = listener
+    public init(  ) {
+
     }
     
     public var description: String {
@@ -41,19 +33,19 @@ open class MBTAHandler: CustomStringConvertible {
     }
     
     // Main App Access point
-    @discardableResult public func deliver(package: Package) -> Bool {
+    @discardableResult public func deliver(query: Query) -> Bool {
         guard listener != nil else {
             fatalError( "No one is listening.")
         }
         
 
-        if let url = MURL.makeURL(package: package) {
+        if let url = MURL.makeURL(query: query) {
             // Create and issue request.
             URLSession.shared.dataTask(with: url, completionHandler: newStyleHandler).resume()
 
-            // Update and track package.
-            package.issued = Date()
-            activePackages.track(package: package)
+            // Update and track Query.
+            query.issued = Date()
+            activeQueries.track(query: query)
             return( true )
         }
         
@@ -62,9 +54,6 @@ open class MBTAHandler: CustomStringConvertible {
     }
     
     fileprivate func newStyleHandler( _ data: Data?, response: URLResponse?, error: Error? ) -> Void {
-        guard listener != nil else {
-            fatalError( "No one is listening to handler" )
-        }
         guard error == nil else {
             print( "Handler got error \(error!.localizedDescription)")
             return
@@ -78,24 +67,28 @@ open class MBTAHandler: CustomStringConvertible {
             return
         }
         
-        // Look up matching package
-        guard let package = activePackages.find(matchingUrl: url, andRemove: true ) else {
+        // Look up matching Query
+        guard let query = activeQueries.find(matchingUrl: url, andRemove: true ) else {
             print( "Handler got unexpeected response! \(url)")
             return
         }
 
-        package.received = Date()
+        query.received = Date()
         
-        switch (package.kind) {
+        switch (query.kind) {
         case .stops:
             let mbtaResult = try! decoder.decode(StopsData.self, from: data)
-            package.response = mbtaResult.data
+            query.response = mbtaResult.data
+            
+        case .routes:
+            let mbtaResult = try! decoder.decode(RoutesData.self, from: data)
+            query.response = mbtaResult.data
             
         default:
-            fatalError( "Don't know how to handle package \(package.kind)")
+            fatalError( "Don't know how to handle Query \(query.kind)")
         }
 
-        listener!.receive(package: package)
+        listener.receive(query: query)
     }
     
 }

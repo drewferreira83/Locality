@@ -19,14 +19,14 @@ class MURL {
     static let URL_HEAD = "https://api-v3.mbta.com/"
     static let MBTA_KEY = "?api_key=0de754c34a1445aeac7cbc2c385ef0ae"
     
-    static func makeURL(package: Package) -> URL? {
+    static func makeURL(query: Query) -> URL? {
         var baseString: String = URL_HEAD
         
-        switch ( package.kind )
+        switch ( query.kind )
         {
         case .stops:
             // If the data is a coordinate
-            if let coordinate = package.data as? CLLocationCoordinate2D {
+            if let coordinate = query.data as? CLLocationCoordinate2D {
                 baseString.append( "stops?")
                 baseString.append( MBTA_KEY )
                 baseString.append( "&filter[latitude]=\(coordinate.latitude)&filter[longitude]=\(coordinate.longitude)" )
@@ -34,7 +34,7 @@ class MURL {
             }
 
             // If the data is an stop ID
-            if let stopID = package.data as? String {
+            if let stopID = query.data as? String {
                 baseString.append( "stops?" )
                 baseString.append( MBTA_KEY)
                 baseString.append( "&filter[id]=\(stopID)")
@@ -43,8 +43,13 @@ class MURL {
             print( "ERROR: Stop requires a StopID string or CLLocationCoordinate2D")
             return nil
             
+        case .routes:
+            // Routes takes either no arg
+            baseString.append( "routes?" )
+            baseString.append( MBTA_KEY )
+            
         default:
-            print( "Don't know how to make URL for '\(package.kind)")
+            print( "Don't know how to make URL for '\(query.kind)")
             return nil
         }
         
@@ -53,7 +58,7 @@ class MURL {
             return nil
         }
         
-        package.url = url
+        query.url = url
         
         return  url
         

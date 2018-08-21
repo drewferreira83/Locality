@@ -9,11 +9,11 @@
 import UIKit
 import MapKit
 
-protocol LocationAccessDelegate {
+protocol LocationListener {
     // Called when access has potentially changed
     // The MapViewController is the expected delegate and will set mapView.showsUserLocation based on settings and access.
-    func access( allowed: Bool )
-    func update( coordinate: CLLocationCoordinate2D)
+    func accessChanged( allowed: Bool )
+    func locationChanged(coordinate: CLLocationCoordinate2D)
 }
 
 //  Current priorities:
@@ -23,14 +23,15 @@ enum LocationTrigger: Int {
 }
 
 class LocationService: NSObject, CLLocationManagerDelegate {
-    public static let share = LocationService()
+    //public static let share = LocationService()
     private static let defaultLocation = CLLocation(latitude: 42.3601, longitude: -71.0589)
 
     fileprivate var locMgr = CLLocationManager()
     fileprivate var userLocation: CLLocation!
     fileprivate var trigger = LocationTrigger.never
     
-    public var delegate: LocationAccessDelegate?
+    public var listener: LocationListener!
+    
     public var here: CLLocationCoordinate2D {
         get { return locMgr.location?.coordinate ?? LocationService.defaultLocation.coordinate }
     }
@@ -46,9 +47,8 @@ class LocationService: NSObject, CLLocationManagerDelegate {
         get {return isEnabled}
     }
     
-    fileprivate override init() {
+    override init() {
         userLocation = locMgr.location
-
         super.init()
 
         locMgr.delegate = self
@@ -85,6 +85,9 @@ class LocationService: NSObject, CLLocationManagerDelegate {
     // CLLocationDelegate METHOD
     //
     //  This is always called when the app starts and when it regains active status.
+    // The LocationService is reporting that access to user location might have changed.
+    //  Change could be caused either by a change in App access to user location -OR-
+    //  the user has changed the track location option in the settings.
     func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
         switch status {
         case .authorizedAlways, .authorizedWhenInUse:
@@ -92,14 +95,15 @@ class LocationService: NSObject, CLLocationManagerDelegate {
         default:
             print( "Not permitted to access location." )
         }
-        delegate?.access(allowed: isEnabled)
+        
+        listener.accessChanged(allowed: isEnabled)
     }
     
     //  DELEGATE METHOD
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         // Received updated location.
         userLocation = locations[0]
-        delegate?.update(coordinate: userLocation.coordinate)
+        listener.locationChanged(coordinate: userLocation.coordinate)
    }
     
     func update() {
@@ -114,6 +118,23 @@ class LocationService: NSObject, CLLocationManagerDelegate {
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
         print( "locationManager failed with error '\(error.localizedDescription)'\n" )
     }
+}
+
+extension Locality: LocationListener {
+    // LocationServiceDelegate
+    func accessChanged(allowed: Bool) {
+        map.set( showUser: allowed)
+    }
+    
+    func locationChanged( coordinate: CLLocationCoordinate2D ) {
+        let span = MKCoordinateSpanMake(0.005, 0.005)
+        let region = MKCoordinateRegionMake(coordinate, span)
+        
+        map.set(region: region)
+        
+        //let Query = Query(kind: .stopsByLocation, data: coordinate)
+    }
+    
 }
 
 

@@ -9,19 +9,24 @@
 import UIKit
 import MapKit
 
-class MapViewController: UIViewController, LocationAccessDelegate {
+protocol MapService {
+    func set( showUser: Bool )
+    func set( region: MKCoordinateRegion)
+}
+
+class MapViewController: UIViewController, MapService {
+    var locality: Locality!
     @IBOutlet weak var mapView: MKMapView!
     @IBAction func reload(_ sender: Any) {
-        LocationService.share.update()
+        // Request should go to Locality object
+        //LocationService.share.update()
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
-        
-        LocationService.share.delegate = self
-        //update(coordinate: LocationService.share.here)
- 
+
+        // Start functionality.
+        locality = Locality( map: self )
     }
 
     override func didReceiveMemoryWarning() {
@@ -29,21 +34,15 @@ class MapViewController: UIViewController, LocationAccessDelegate {
         // Dispose of any resources that can be recreated.
     }
     
-    // LocationServiceDelegate
-    func access( allowed: Bool){
+    public func set( showUser: Bool){
         // The LocationService is reporting that access to user location might have changed.
         //  Change could be caused either by a change in App access to user location -OR-
         //  the user has changed the track location option in the settings.
-        mapView.showsUserLocation = allowed
+        mapView.showsUserLocation = showUser
     }
     
-    func update( coordinate: CLLocationCoordinate2D ) {
-        let span = MKCoordinateSpanMake(0.005, 0.005)
-        let region = MKCoordinateRegionMake(coordinate, span)
-
+    func set( region: MKCoordinateRegion ) {
         mapView.setRegion(region, animated: true)
-        
-        //let package = Package(kind: .stopsByLocation, data: coordinate)
    }
     
 

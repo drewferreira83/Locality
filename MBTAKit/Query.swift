@@ -19,7 +19,7 @@ import Foundation
  
  */
 
-open class Package: Hashable, CustomStringConvertible {
+open class Query: Hashable, CustomStringConvertible {
     static private var counter = 0
     
     public var hashValue: Int {
@@ -29,6 +29,7 @@ open class Package: Hashable, CustomStringConvertible {
     public enum Kind: String {
         case alert
         case predictions
+        case routes
         case schedules
         case stops
         case trips
@@ -48,65 +49,65 @@ open class Package: Hashable, CustomStringConvertible {
     public var issued: Date?
     public var received: Date?
     
-    init( kind: Kind, data: Any?) {
+    init( kind: Kind, data: Any? = nil) {
         self.kind = kind
         self.data = data
-        self.id = Package.counter
-        Package.counter += 1
+        self.id = Query.counter
+        Query.counter += 1
     }
     
     public var description: String {
-        return( "Package: \(kind)")
+        return( "Query: \(kind)")
     }
 
-    // The URL is used to distinguish packages
-    static public func == ( lhs: Package, rhs: Package ) -> Bool {
+    // The URL is used to distinguish queries
+    static public func == ( lhs: Query, rhs: Query ) -> Bool {
         return lhs.url == rhs.url
     }
     
-    static public func != (lhs: Package, rhs: Package) -> Bool {
+    static public func != (lhs: Query, rhs: Query) -> Bool {
         return lhs.url != rhs.url
     }
 }
 
-class PackageTracker: CustomStringConvertible {
-    private var packages = Set<Package>()
+class QueryTracker: CustomStringConvertible {
+    private var queries = Set<Query>()
     
     var count: Int {
-        return packages.count
+        return queries.count
     }
     
     var isEmpty: Bool {
-        return packages.isEmpty
+        return queries.isEmpty
     }
     
-    func contains( package: Package ) -> Bool {
-        return packages.contains( package)
+    func contains( query: Query ) -> Bool {
+        return queries.contains( query )
     }
     
-    func track( package: Package ) {
-        packages.insert(package )
+    func track( query: Query ) {
+        queries.insert( query )
     }
     
-    func find( matchingUrl: URL, andRemove: Bool = false ) -> Package? {
-        for package in packages {
-            if package.url == matchingUrl {
+    func find( matchingUrl: URL, andRemove: Bool = false ) -> Query? {
+        for query in queries {
+            if query.url == matchingUrl {
                 if andRemove {
-                    remove( package: package )
+                    remove( query: query )
                 }
-                return package
+                return query
             }
         }
         
         return nil
     }
     
-    func remove( package: Package ) {
-        packages.remove( package)
+    func remove( query: Query ) {
+        queries.remove( query)
     }
     
     func removeAll() {
-        packages.removeAll(keepingCapacity: false)
+        queries.removeAll(keepingCapacity: false)
     }
     
     public var description: String {
