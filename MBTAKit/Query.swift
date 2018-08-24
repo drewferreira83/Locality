@@ -56,8 +56,18 @@ open class Query: Hashable, CustomStringConvertible {
         Query.counter += 1
     }
     
+    public var status: String {
+        if let timestamp = received {
+            return( "Received \(timestamp)")
+        } else if let timestamp = issued {
+            return( "Issued \(timestamp)")
+        }
+        
+        return( "Created \(created)")
+    }
+    
     public var description: String {
-        return( "Query: \(kind)")
+        return( "Query[\(kind)] \(status)")
     }
 
     // The URL is used to distinguish queries

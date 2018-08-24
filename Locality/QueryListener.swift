@@ -13,16 +13,21 @@ extension Locality: Listener {
 
      // NEVER ON THE MAIN THREAD!!!!
     public func receive(query: Query) {
-        print( "Got a Query!")
+        print( "Received \(query)")
+        
         switch query.kind {
         case .stops:
             guard let stops = query.response as? [Stop] else {
                 print( "/stops returned something unexpected.")
                 return
             }
+
+            //  Create marks for the stops.
+            var marks = [Mark]()
             for stop in stops {
-                print( stop.attributes.name)
+                marks.append(Mark(stop: stop))
             }
+            map.add(marks: marks)
             
         case .routes:
             guard let routes = query.response as? [Route] else {
@@ -31,7 +36,6 @@ extension Locality: Listener {
             }
             for route in routes {
                 routeDict[route.id] = route
-                print( route.attributes.long_name)
             }
             
         default:

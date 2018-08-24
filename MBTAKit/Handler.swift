@@ -40,6 +40,7 @@ open class Handler: CustomStringConvertible {
         
 
         if let url = MURL.makeURL(query: query) {
+           // print( "Issuing \(url)")
             // Create and issue request.
             URLSession.shared.dataTask(with: url, completionHandler: newStyleHandler).resume()
 

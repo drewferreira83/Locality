@@ -102,6 +102,7 @@ class LocationService: NSObject, CLLocationManagerDelegate {
     //  DELEGATE METHOD
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         // Received updated location.
+        manager.stopUpdatingLocation()
         userLocation = locations[0]
         listener.locationChanged(coordinate: userLocation.coordinate)
    }
@@ -110,7 +111,8 @@ class LocationService: NSObject, CLLocationManagerDelegate {
         // Request latest location, if permitted.
         if  isEnabled {
             // TODO: This takes a long time in testing...
-            locMgr.requestLocation()
+            //locMgr.requestLocation()
+            locMgr.startUpdatingLocation()
         }
     }
     
@@ -132,7 +134,9 @@ extension Locality: LocationListener {
         
         map.set(region: region)
         
-        //let Query = Query(kind: .stopsByLocation, data: coordinate)
+        // Ask for nearby stops
+        let query = Query(kind: .stops, data: coordinate)
+        handler.deliver(query: query)
     }
     
 }

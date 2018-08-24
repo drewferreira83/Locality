@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import MapKit
 
 // Wrapper struct to decode JSON returned from a /stops call.
 struct StopsData: Decodable {
@@ -47,8 +48,26 @@ public struct Stop: Decodable {
     public let attributes: Attributes
     public let id: String
     public let type: String
-    //public let relationships: Relationships
+    
+    public var coordinate: CLLocationCoordinate2D {
+        get {
+            return CLLocationCoordinate2DMake(attributes.latitude, attributes.longitude)
+        }
+    }
 
+    // Convenience access to Attributes
+    public var lat: Double {
+        return attributes.latitude
+    }
+    
+    public var lng: Double {
+        return attributes.longitude
+    }
+    
+    public var name: String {
+        return attributes.name
+    }
+    
     // Full name is retained in attributes.name
     public var shortName: String {
         var workingString = attributes.name

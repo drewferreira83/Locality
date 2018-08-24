@@ -9,7 +9,7 @@
 import Foundation
 import MapKit
 
-public class Locality: CustomStringConvertible {
+public class Locality: NSObject {
     let BOSTON = CLLocationCoordinate2D( latitude: 42.36, longitude: -71.062)
 
     static public var share: Locality!
@@ -22,17 +22,18 @@ public class Locality: CustomStringConvertible {
     
     init( map: MapService ) {
         self.map = map
+        super.init()
+
+        Locality.share = self
         handler.listener = self
         locationService.listener = self
 
-        Locality.share = self
-        
         //Get routes
         let query = Query(kind: .routes)
         handler.deliver(query: query)
     }
     
-    public var description: String {
+    override public var description: String {
         return( "Locality Core Object, v0.1")
     }
     

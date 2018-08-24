@@ -9,9 +9,13 @@
 import UIKit
 import MapKit
 
+// Only use these methods to interact with the MKMapView.
 protocol MapService {
     func set( showUser: Bool )
-    func set( region: MKCoordinateRegion)
+    func set( region: MKCoordinateRegion )
+    func add( marks: [Mark])
+    func removeMarks(ofType: MarkType)
+    func removeAllMarks()
 }
 
 class MapViewController: UIViewController, MapService {
@@ -27,6 +31,7 @@ class MapViewController: UIViewController, MapService {
 
         // Start functionality.
         locality = Locality( map: self )
+        mapView.delegate = locality
     }
 
     override func didReceiveMemoryWarning() {
@@ -34,7 +39,9 @@ class MapViewController: UIViewController, MapService {
         // Dispose of any resources that can be recreated.
     }
     
-    public func set( showUser: Bool){
+    /****  PUBLIC FUNCTIONS  ****/
+    
+    public func set( showUser: Bool ){
         // The LocationService is reporting that access to user location might have changed.
         //  Change could be caused either by a change in App access to user location -OR-
         //  the user has changed the track location option in the settings.
@@ -43,8 +50,28 @@ class MapViewController: UIViewController, MapService {
     
     func set( region: MKCoordinateRegion ) {
         mapView.setRegion(region, animated: true)
-   }
+    }
     
-
+    func add( marks: [Mark] ) {
+        print( "Adding \(marks.count) marks")
+        mapView.addAnnotations(marks)
+        print( "Have \(mapView.annotations.count)")
+    }
+    
+    func removeMarks(ofType: MarkType) {
+        var matchingMarks = [Mark]()
+        for annotation in mapView.annotations {
+            if let mark = annotation as? Mark {
+                if mark.type == ofType  {
+                    matchingMarks.append( mark )
+                }
+            }
+        }
+        mapView.removeAnnotations(matchingMarks)
+    }
+    
+    func removeAllMarks() {
+        mapView.removeAnnotations(mapView.annotations)
+    }
 }
 
