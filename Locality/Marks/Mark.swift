@@ -32,6 +32,7 @@ open class Mark: NSObject, MKAnnotation {
         self.type = .stop
         self.degrees = nil
         self.title = stop.name
+        self.subtitle = stop.id
         super.init()
     }
 

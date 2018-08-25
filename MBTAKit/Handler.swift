@@ -42,7 +42,7 @@ open class Handler: CustomStringConvertible {
         if let url = MURL.makeURL(query: query) {
            // print( "Issuing \(url)")
             // Create and issue request.
-            URLSession.shared.dataTask(with: url, completionHandler: newStyleHandler).resume()
+            URLSession.shared.dataTask(with: url, completionHandler: responseHandler).resume()
 
             // Update and track Query.
             query.issued = Date()
@@ -54,7 +54,7 @@ open class Handler: CustomStringConvertible {
         return false
     }
     
-    fileprivate func newStyleHandler( _ data: Data?, response: URLResponse?, error: Error? ) -> Void {
+    fileprivate func responseHandler( _ data: Data?, response: URLResponse?, error: Error? ) -> Void {
         guard error == nil else {
             print( "Handler got error \(error!.localizedDescription)")
             return

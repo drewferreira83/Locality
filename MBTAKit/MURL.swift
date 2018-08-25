@@ -27,7 +27,7 @@ class MURL {
         case .stops:
             // If the data is a coordinate
             if let coordinate = query.data as? CLLocationCoordinate2D {
-                baseString.append( "stops?")
+                baseString.append( "stops")
                 baseString.append( MBTA_KEY )
                 baseString.append( "&filter[latitude]=\(coordinate.latitude)&filter[longitude]=\(coordinate.longitude)" )
                 break
@@ -35,7 +35,7 @@ class MURL {
 
             // If the data is an stop ID
             if let stopID = query.data as? String {
-                baseString.append( "stops?" )
+                baseString.append( "stops" )
                 baseString.append( MBTA_KEY)
                 baseString.append( "&filter[id]=\(stopID)")
                 break

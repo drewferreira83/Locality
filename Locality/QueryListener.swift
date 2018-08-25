@@ -25,6 +25,15 @@ extension Locality: Listener {
             //  Create marks for the stops.
             var marks = [Mark]()
             for stop in stops {
+/*
+                if let parent = stop.relationships.parent_station {
+                    print( "Stop \(stop.id) has parent \(String(describing: parent.id))")
+                }
+ */
+                if stop.id == "door-gover-main" {
+                    print( "Stop!" )
+                }
+                
                 marks.append(Mark(stop: stop))
             }
             map.add(marks: marks)

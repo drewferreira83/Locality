@@ -12,10 +12,11 @@ import MapKit
 // Wrapper struct to decode JSON returned from a /stops call.
 struct StopsData: Decodable {
     let data: [Stop]?
-    //let jsonapi: String
+    let jsonapi: [String:String]
     
     enum CodingKeys: String, CodingKey {
         case data
+        case jsonapi
     }
 }
 
@@ -32,21 +33,37 @@ public struct Stop: Decodable {
         public let wheelchair_boarding: Int
     }
     
-    // CURRENTLY IGNORED
+    public struct ParentStation: Decodable {
+        public let id: String
+        enum CodingKey {
+            case id
+        }
+    }
+    
+    public struct ParentStationData: Decodable {
+        let data: ParentStation?
+        enum CodingKey {
+            case data
+        }
+    }
+    
     public struct Relationships: Decodable {
-        public let child_stops: [Stop]?
-        public let facilities: [String:String]
-        public let parent_station: [String:String?]
+        let parent_station: ParentStationData
+        enum CodingKey {
+            case parent_station
+        }
     }
     
     enum CodingKeys: CodingKey {
         case id
         case attributes
+        case relationships
         case type
     }
     
     public let attributes: Attributes
     public let id: String
+    public let relationships: Relationships
     public let type: String
     
     public var coordinate: CLLocationCoordinate2D {
