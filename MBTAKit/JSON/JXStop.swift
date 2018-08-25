@@ -1,0 +1,90 @@
+//
+//  Stop.swift
+//  Locality
+//
+//  Created by Andrew Ferreira on 8/17/18.
+//  Copyright © 2018 Andrew Ferreira. All rights reserved.
+//
+
+import Foundation
+import MapKit
+
+// Wrapper struct to decode JSON returned from a /stops call.
+struct JXStopsData: Decodable {
+    let data: [JXStop]?
+    let jsonapi: [String:String]
+    
+    enum CodingKeys: String, CodingKey {
+        case data
+        case jsonapi
+    }
+    
+    func export() -> [Stop] {
+        var stops = [Stop]()
+        
+        if let data = data {
+            for jxStop in data {
+                stops.append( jxStop.export() )
+            }
+        }
+
+        return stops
+    }
+}
+
+struct JXStop: Decodable {
+    struct Attributes: Decodable {
+        public let address: String?
+        public let description: String?
+        public let latitude: Double
+        public let location_type: Int
+        public let longitude: Double
+        public let name: String
+        public let platform_code: String?
+        public let platform_name: String?
+        public let wheelchair_boarding: Int
+    }
+    
+    struct ParentStation: Decodable {
+        public let id: String
+        enum CodingKey {
+            case id
+        }
+    }
+    
+    struct ParentStationData: Decodable {
+        let data: ParentStation?
+        enum CodingKey {
+            case data
+        }
+    }
+    
+    public struct Relationships: Decodable {
+        let parent_station: ParentStationData
+        enum CodingKey {
+            case parent_station
+        }
+    }
+    
+    enum CodingKeys: CodingKey {
+        case id
+        case attributes
+        case relationships
+        case type
+    }
+    
+    let attributes: Attributes
+    let id: String
+    let relationships: Relationships
+    let type: String
+    
+    func export() -> Stop {
+        let coordinate = CLLocationCoordinate2DMake(attributes.latitude, attributes.longitude   )
+        let stop = Stop(id: id, name: attributes.name, coordinate: coordinate)
+        stop.parentStation = relationships.parent_station.data?.id
+        
+        return stop
+    }
+   
+}
+

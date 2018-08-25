@@ -25,17 +25,12 @@ extension Locality: Listener {
             //  Create marks for the stops.
             var marks = [Mark]()
             for stop in stops {
-/*
-                if let parent = stop.relationships.parent_station {
-                    print( "Stop \(stop.id) has parent \(String(describing: parent.id))")
+                // Ignore child stations.
+                if stop.parentStation == nil {
+                    marks.append(Mark(stop: stop))
                 }
- */
-                if stop.id == "door-gover-main" {
-                    print( "Stop!" )
-                }
-                
-                marks.append(Mark(stop: stop))
             }
+            map.removeAllMarks()
             map.add(marks: marks)
             
         case .routes:
@@ -46,6 +41,7 @@ extension Locality: Listener {
             for route in routes {
                 routeDict[route.id] = route
             }
+            print( "Loaded \(routeDict.count) routes")
             
         default:
             print( "Don't know what to do with Query \(query.kind)")

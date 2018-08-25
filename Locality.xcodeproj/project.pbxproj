@@ -7,15 +7,17 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3A142DDB21319BA700242051 /* Stop.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A142DDA21319BA700242051 /* Stop.swift */; };
+		3A4D883C2131A10F00409685 /* Route.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A4D883B2131A10F00409685 /* Route.swift */; };
 		3A65513C212716D0007EF78B /* Handler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A65513B212716D0007EF78B /* Handler.swift */; };
 		3A65513F21271A96007EF78B /* MURL.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A65513E21271A96007EF78B /* MURL.swift */; };
-		3A65514121271CD6007EF78B /* Stop.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A65514021271CD6007EF78B /* Stop.swift */; };
+		3A65514121271CD6007EF78B /* JXStop.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A65514021271CD6007EF78B /* JXStop.swift */; };
 		3A760E40213042DF00172F69 /* Mark.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A760E3F213042DF00172F69 /* Mark.swift */; };
 		3A760E442130459A00172F69 /* MarkView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A760E432130459A00172F69 /* MarkView.swift */; };
 		3A760E4721305B1900172F69 /* MapViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A760E4621305B1900172F69 /* MapViewDelegate.swift */; };
 		3A760E492130B10000172F69 /* Foo in Resources */ = {isa = PBXBuildFile; fileRef = 3A760E482130B10000172F69 /* Foo */; };
 		3AB902ED212865090042284C /* Query.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AB902EC212865090042284C /* Query.swift */; };
-		3AE927F5212C5D4C00BB68A6 /* Route.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AE927F4212C5D4C00BB68A6 /* Route.swift */; };
+		3AE927F5212C5D4C00BB68A6 /* JXRoute.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AE927F4212C5D4C00BB68A6 /* JXRoute.swift */; };
 		3AE927F7212C5F2200BB68A6 /* Locality.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AE927F6212C5F2200BB68A6 /* Locality.swift */; };
 		3AF4EFE0212B046100FB87E6 /* QueryListener.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AF4EFDF212B046100FB87E6 /* QueryListener.swift */; };
 		6A263A822124655400B1D470 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A263A812124655400B1D470 /* AppDelegate.swift */; };
@@ -28,15 +30,17 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		3A142DDA21319BA700242051 /* Stop.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Stop.swift; sourceTree = "<group>"; };
+		3A4D883B2131A10F00409685 /* Route.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Route.swift; sourceTree = "<group>"; };
 		3A65513B212716D0007EF78B /* Handler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Handler.swift; sourceTree = "<group>"; };
 		3A65513E21271A96007EF78B /* MURL.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MURL.swift; sourceTree = "<group>"; };
-		3A65514021271CD6007EF78B /* Stop.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Stop.swift; sourceTree = "<group>"; };
+		3A65514021271CD6007EF78B /* JXStop.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JXStop.swift; sourceTree = "<group>"; };
 		3A760E3F213042DF00172F69 /* Mark.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Mark.swift; sourceTree = "<group>"; };
 		3A760E432130459A00172F69 /* MarkView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MarkView.swift; sourceTree = "<group>"; };
 		3A760E4621305B1900172F69 /* MapViewDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewDelegate.swift; sourceTree = "<group>"; };
 		3A760E482130B10000172F69 /* Foo */ = {isa = PBXFileReference; lastKnownFileType = text; path = Foo; sourceTree = "<group>"; };
 		3AB902EC212865090042284C /* Query.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Query.swift; sourceTree = "<group>"; };
-		3AE927F4212C5D4C00BB68A6 /* Route.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Route.swift; sourceTree = "<group>"; };
+		3AE927F4212C5D4C00BB68A6 /* JXRoute.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JXRoute.swift; sourceTree = "<group>"; };
 		3AE927F6212C5F2200BB68A6 /* Locality.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Locality.swift; sourceTree = "<group>"; };
 		3AF4EFDF212B046100FB87E6 /* QueryListener.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QueryListener.swift; sourceTree = "<group>"; };
 		6A263A7E2124655400B1D470 /* Locality.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Locality.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -62,14 +66,24 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		3A142DD92131995000242051 /* JSON */ = {
+			isa = PBXGroup;
+			children = (
+				3A65514021271CD6007EF78B /* JXStop.swift */,
+				3AE927F4212C5D4C00BB68A6 /* JXRoute.swift */,
+			);
+			path = JSON;
+			sourceTree = "<group>";
+		};
 		3A65513D212718E4007EF78B /* MBTAKit */ = {
 			isa = PBXGroup;
 			children = (
+				3A142DD92131995000242051 /* JSON */,
 				3A65513B212716D0007EF78B /* Handler.swift */,
 				3A65513E21271A96007EF78B /* MURL.swift */,
-				3A65514021271CD6007EF78B /* Stop.swift */,
-				3AE927F4212C5D4C00BB68A6 /* Route.swift */,
 				3AB902EC212865090042284C /* Query.swift */,
+				3A142DDA21319BA700242051 /* Stop.swift */,
+				3A4D883B2131A10F00409685 /* Route.swift */,
 			);
 			path = MBTAKit;
 			sourceTree = "<group>";
@@ -200,18 +214,20 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3AE927F5212C5D4C00BB68A6 /* Route.swift in Sources */,
+				3AE927F5212C5D4C00BB68A6 /* JXRoute.swift in Sources */,
 				6A263A842124655400B1D470 /* MapViewController.swift in Sources */,
 				3A760E4721305B1900172F69 /* MapViewDelegate.swift in Sources */,
+				3A4D883C2131A10F00409685 /* Route.swift in Sources */,
 				3AF4EFE0212B046100FB87E6 /* QueryListener.swift in Sources */,
 				3AB902ED212865090042284C /* Query.swift in Sources */,
 				6A263A942124688200B1D470 /* LocationService.swift in Sources */,
 				3A65513F21271A96007EF78B /* MURL.swift in Sources */,
+				3A142DDB21319BA700242051 /* Stop.swift in Sources */,
 				3A65513C212716D0007EF78B /* Handler.swift in Sources */,
 				3A760E442130459A00172F69 /* MarkView.swift in Sources */,
 				6A263A822124655400B1D470 /* AppDelegate.swift in Sources */,
 				3AE927F7212C5F2200BB68A6 /* Locality.swift in Sources */,
-				3A65514121271CD6007EF78B /* Stop.swift in Sources */,
+				3A65514121271CD6007EF78B /* JXStop.swift in Sources */,
 				3A760E40213042DF00172F69 /* Mark.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -40,7 +40,7 @@ open class Handler: CustomStringConvertible {
         
 
         if let url = MURL.makeURL(query: query) {
-           // print( "Issuing \(url)")
+            print( "***Issuing \(url)")
             // Create and issue request.
             URLSession.shared.dataTask(with: url, completionHandler: responseHandler).resume()
 
@@ -78,12 +78,12 @@ open class Handler: CustomStringConvertible {
         
         switch (query.kind) {
         case .stops:
-            let mbtaResult = try! decoder.decode(StopsData.self, from: data)
-            query.response = mbtaResult.data
+            let jxStopsData = try! decoder.decode( JXStopsData.self , from: data)
+            query.response = jxStopsData.export()
             
         case .routes:
-            let mbtaResult = try! decoder.decode(RoutesData.self, from: data)
-            query.response = mbtaResult.data
+            let jxRoutesData = try! decoder.decode(JXRoutesData.self, from: data)
+            query.response = jxRoutesData.export()
             
         default:
             fatalError( "Don't know how to handle Query \(query.kind)")

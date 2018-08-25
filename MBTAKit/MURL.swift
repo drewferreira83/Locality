@@ -32,6 +32,17 @@ class MURL {
                 baseString.append( "&filter[latitude]=\(coordinate.latitude)&filter[longitude]=\(coordinate.longitude)" )
                 break
             }
+            
+            if let region = query.data as? MKCoordinateRegion {
+                let center = region.center
+                let radius = region.maxDelta
+                
+                baseString.append( "stops")
+                baseString.append( MBTA_KEY )
+                baseString.append( "&filter[latitude]=\(center.latitude)&filter[longitude]=\(center.longitude)" )
+                baseString.append( "&filter[radius]=\(radius)" )
+                break
+            }
 
             // If the data is an stop ID
             if let stopID = query.data as? String {
@@ -62,5 +73,11 @@ class MURL {
         
         return  url
         
+    }
+}
+
+extension MKCoordinateRegion {
+    public var maxDelta: Double {
+        return max( span.latitudeDelta, span.longitudeDelta )
     }
 }

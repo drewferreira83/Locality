@@ -135,7 +135,7 @@ extension Locality: LocationListener {
         map.set(region: region)
         
         // Ask for nearby stops
-        let query = Query(kind: .stops, data: coordinate)
+        let query = Query(kind: .stops, data: region )
         handler.deliver(query: query)
     }
     

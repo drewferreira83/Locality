@@ -56,7 +56,7 @@ open class Query: Hashable, CustomStringConvertible {
         Query.counter += 1
     }
     
-    public var status: String {
+    public var statusDescription: String {
         if let timestamp = received {
             return( "Received \(timestamp)")
         } else if let timestamp = issued {
@@ -67,7 +67,7 @@ open class Query: Hashable, CustomStringConvertible {
     }
     
     public var description: String {
-        return( "Query[\(kind)] \(status)")
+        return( "Query[\(kind)] \(statusDescription)")
     }
 
     // The URL is used to distinguish queries
@@ -122,5 +122,9 @@ class QueryTracker: CustomStringConvertible {
     
     public var description: String {
         return "v3.0"
+    }
+    
+    func overdue( since: Date ) {
+        // THis will return overdue queries
     }
 }

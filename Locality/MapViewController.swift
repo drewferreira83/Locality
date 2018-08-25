@@ -45,17 +45,21 @@ class MapViewController: UIViewController, MapService {
         // The LocationService is reporting that access to user location might have changed.
         //  Change could be caused either by a change in App access to user location -OR-
         //  the user has changed the track location option in the settings.
-        mapView.showsUserLocation = showUser
+        DispatchQueue.main.async {
+            self.mapView.showsUserLocation = showUser
+        }
     }
     
     func set( region: MKCoordinateRegion ) {
-        mapView.setRegion(region, animated: true)
+        DispatchQueue.main.async {
+            self.mapView.setRegion(region, animated: true)
+        }
     }
     
     func add( marks: [Mark] ) {
-        print( "Adding \(marks.count) marks")
-        mapView.addAnnotations(marks)
-        print( "Have \(mapView.annotations.count)")
+       DispatchQueue.main.async {
+            self.mapView.addAnnotations(marks)
+        }
     }
     
     func removeMarks(ofType: MarkType) {
@@ -67,11 +71,17 @@ class MapViewController: UIViewController, MapService {
                 }
             }
         }
-        mapView.removeAnnotations(matchingMarks)
+        
+        DispatchQueue.main.async {
+            self.mapView.removeAnnotations(matchingMarks)
+        }
     }
     
     func removeAllMarks() {
-        mapView.removeAnnotations(mapView.annotations)
+        let annotations = mapView.annotations
+        DispatchQueue.main.async {
+            self.mapView.removeAnnotations(annotations)
+        }
     }
 }
 
