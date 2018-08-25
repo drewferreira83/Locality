@@ -51,7 +51,9 @@ class MURL {
                 baseString.append( "&filter[id]=\(stopID)")
                 break
             }
-            print( "ERROR: Stop requires a StopID string or CLLocationCoordinate2D")
+            
+            
+            print( "ERROR: Stop requires a StopID string, coordinate, or region." )
             return nil
             
         case .routes:
