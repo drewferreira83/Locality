@@ -44,13 +44,8 @@ struct JXVehicle: Decodable {
         // let updated_at: Date
     }
     
-    typealias  RelationshipElementDictionary = [String: String]
-    
-    struct RelationshipElement: Decodable {
-        let data: RelationshipElementDictionary
-        enum CodingKey {
-            case data
-        }
+     struct RelationshipElement: Decodable {
+        let data: [String:String]
     }
     
     struct Relationships: Decodable {

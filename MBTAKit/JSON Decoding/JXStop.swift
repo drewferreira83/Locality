@@ -45,25 +45,14 @@ struct JXStop: Decodable {
         public let wheelchair_boarding: Int
     }
     
-    struct ParentStation: Decodable {
-        public let id: String
-        enum CodingKey {
-            case id
-        }
+    struct RelationshipElement: Decodable {
+        let data: [String:String]?
     }
     
-    struct ParentStationData: Decodable {
-        let data: ParentStation?
-        enum CodingKey {
-            case data
-        }
-    }
-    
-    public struct Relationships: Decodable {
-        let parent_station: ParentStationData
-        enum CodingKey {
-            case parent_station
-        }
+    struct Relationships: Decodable {
+        //let child_stops: RelationshipElement
+        //let facilities: RelationshipElement?
+        let parent_station: RelationshipElement
     }
     
     enum CodingKeys: CodingKey {
@@ -81,7 +70,7 @@ struct JXStop: Decodable {
     func export() -> Stop {
         let coordinate = CLLocationCoordinate2DMake(attributes.latitude, attributes.longitude   )
         let stop = Stop(id: id, name: attributes.name, coordinate: coordinate)
-        stop.parentStation = relationships.parent_station.data?.id
+        stop.parentStation = relationships.parent_station.data?[ "id" ]
         
         return stop
     }

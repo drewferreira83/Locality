@@ -13,10 +13,12 @@ public class Trip: NSObject {
     let dir: Int
     let headsign: String
     let accessible: Int
+    let routeID: String?
     
-    init( id: String, dir: Int, headsign: String, accessible: Int ) {
+    init( id: String, dir: Int, routeID: String?, headsign: String, accessible: Int ) {
         self.id = id
         self.dir = dir
+        self.routeID = routeID
         self.headsign = headsign
         self.accessible = accessible
         super.init()

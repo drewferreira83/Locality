@@ -25,14 +25,14 @@ class MURL {
         switch ( query.kind )
         {
         case .stops:
-            
+            baseString.append( "stops")
+            baseString.append( MBTA_KEY )
+
             // If there is a region, use the center and get nearby stops
             if let region = query.data as? MKCoordinateRegion {
                 let center = region.center
                 let radius = region.maxDelta
                 
-                baseString.append( "stops")
-                baseString.append( MBTA_KEY )
                 baseString.append( "&filter[latitude]=\(center.latitude)" )
                 baseString.append( "&filter[longitude]=\(center.longitude)" )
                 baseString.append( "&filter[radius]=\(radius)" )
@@ -41,15 +41,11 @@ class MURL {
 
             // If the data is an stop ID
             if let stopID = query.data as? String {
-                baseString.append( "stops" )
-                baseString.append( MBTA_KEY)
                 baseString.append( "&filter[id]=\(stopID)")
                 break
             }
             
-            
-            print( "ERROR: Stop requires a StopID string, coordinate, or region." )
-            return nil
+            fatalError( "Stops query requires an ID, coordiante, or region. Data=\(String(describing:query.data))" )
             
         case .routes:
             // Routes takes either no arg
@@ -57,36 +53,61 @@ class MURL {
             baseString.append( MBTA_KEY )
             
         case .trips:
+            baseString.append( "trips" )
+            baseString.append( MBTA_KEY)
+
             // Trips take a tripID.
             if let tripID = query.data as? String {
-                baseString.append( "trips" )
-                baseString.append( MBTA_KEY)
                 baseString.append( "&filter[id]=\(tripID)")
                 break
                 
             }
             
-            print( "ERROR: Trips expected a tripID" )
-            return nil
-            
-        case .vehicles:
-            // If the data is a Stop
-            if let stop = query.data as? Stop {
-                baseString.append( "vehicles" )
-                baseString.append( MBTA_KEY)
-                baseString.append( "&filter[route]=Red")
+            if let route = query.data as? Route {
+                baseString.append( "&filter[route]=\(route.id)" )
                 break
             }
             
+            fatalError( "Trips query requires an ID or Route. data=\(String(describing:query.data))")
+            
+        case .vehicles:
+            baseString.append( "vehicles" )
+            baseString.append( MBTA_KEY)
+
+            // Valid parameters are Route and Vehicle ID
+            if let route = query.data as? Route {
+                baseString.append( "&filter[route]=\(route.id)")
+                break
+            }
+            
+            if let id = query.data as? String {
+                baseString.append( "&filter[id]=\(id)")
+                break
+            }
+            
+            if let trip = query.data as? Trip {
+                baseString.append( "&filter[trip]=\(trip.id)" )
+            }
+
+            fatalError( "Vehicle Query requires an ID, Route, or Trip.  data=\(String(describing: query.data))")
+            
+        case .predictions:
+            baseString.append("predictions")
+            baseString.append( MBTA_KEY )
+            
+            if let stop = query.data as? Stop {
+                baseString.append( "&filter[stop]=\(stop.id)")
+                break
+            }
+            
+            fatalError( "Prediction Query requires a coordinate, Stop, Route, or Trip. data=\(String(describing:query.data))")
             
         default:
-            print( "Don't know how to make URL for '\(query.kind)")
-            return nil
+            fatalError( "Unsupported query: \(query.kind)" )
         }
         
         guard let url = URL( string: baseString ) else {
-            print( "Failed to create URL from \(baseString)")
-            return nil
+            fatalError( "Failed to create URL from \(baseString)" )
         }
         
         query.url = url

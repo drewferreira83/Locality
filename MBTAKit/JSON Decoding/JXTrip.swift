@@ -34,15 +34,30 @@ struct JXTrip: Decodable {
         let wheelchair_accessible: Int
     }
     
+    
+    struct RelationshipElement: Decodable {
+        let data: [String:String]
+    }
+    
+    struct Relationships: Decodable {
+        let route: RelationshipElement
+        let service: RelationshipElement
+        let shape: RelationshipElement
+    }
+    
+
     let id: String
     let attributes: Attributes
+    let relationships: Relationships
     
     enum CodingKey {
         case id
         case attributes
+        case relationships
     }
     
     func export() -> Trip {
-        return Trip(id: id, dir: attributes.direction_id, headsign: attributes.headsign, accessible: attributes.wheelchair_accessible)
+        let trip = Trip(id: id, dir: attributes.direction_id, routeID: relationships.route.data["ID"], headsign: attributes.headsign, accessible: attributes.wheelchair_accessible)
+        return trip
     }
 }

@@ -73,7 +73,8 @@ extension Locality: MKMapViewDelegate {
             guard let stop = mark.stop else {
                 fatalError( "No Stop data for Mark \(mark)")
             }
-            let query = Query(kind: .vehicles, data: stop)
+            // Get predictions at this stop.
+            let query = Query(kind: .predictions, data: stop)
             handler.deliver(query: query)
         default:
             print( "Selected \(markView), but ignored" )
