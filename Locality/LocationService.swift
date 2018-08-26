@@ -29,6 +29,8 @@ class LocationService: NSObject, CLLocationManagerDelegate {
     fileprivate var userLocation: CLLocation!
     fileprivate var trigger = LocationTrigger.never
     
+    fileprivate var lastLocation: CLLocation?
+    
     public let listener: LocationListener!
     
     public var here: CLLocationCoordinate2D {
@@ -103,8 +105,12 @@ class LocationService: NSObject, CLLocationManagerDelegate {
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         // Received updated location.
         manager.stopUpdatingLocation()
-        userLocation = locations[0]
-        listener.locationChanged(coordinate: userLocation.coordinate)
+        let newLocation = locations[0]
+
+        if (lastLocation == nil) || (lastLocation! != newLocation) {
+            lastLocation = newLocation
+            listener.locationChanged(coordinate: userLocation.coordinate)
+        }
    }
     
     func update() {

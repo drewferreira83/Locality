@@ -9,7 +9,7 @@
 import Foundation
 import MapKit
 
-extension Locality: MKMapViewDelegate {
+extension MapViewController: MKMapViewDelegate {
     
     // This is for custom annotations on the map, like stations and vehicles.  This refers to the
     // displayed symbol on the map, NOT THE CALLOUT BUBBLE.
@@ -35,7 +35,9 @@ extension Locality: MKMapViewDelegate {
     //  If you do select it programmatically, call this function also.
     public func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
         if let markView = view as? MarkView {
-            didSelect( markView: markView )
+            if let mark = markView.mark {
+                locality.didSelect( mark: mark )
+            }
         }
     }
     
@@ -63,12 +65,12 @@ extension Locality: MKMapViewDelegate {
             view.canShowCallout = !(view.annotation is MKUserLocation)
         }
     }
-    
-    func didSelect( markView: MarkView ) {
-        guard let mark = markView.mark else {
-            fatalError( "MarkView doesn't have a Mark annotation? \(markView)")
-        }
-        switch mark.type {
+}
+
+extension Locality {
+    func didSelect( mark: Mark ) {
+        
+        switch mark.kind {
         case .stop:
             guard let stop = mark.stop else {
                 fatalError( "No Stop data for Mark \(mark)")
@@ -76,10 +78,9 @@ extension Locality: MKMapViewDelegate {
             // Get predictions at this stop.
             let query = Query(kind: .predictions, data: stop)
             handler.deliver(query: query)
+            
         default:
-            print( "Selected \(markView), but ignored" )
+            print( "Selected \(mark), but ignored" )
         }
     }
-
-    
 }

@@ -9,11 +9,12 @@
 import UIKit
 import MapKit
 
-enum MarkType: String {
-    case stop, vehicle
-}
 
 open class Mark: NSObject, MKAnnotation {
+    enum Kind: String {
+        case stop, vehicle
+    }
+
     public let coordinate: CLLocationCoordinate2D
     public let title: String?
     public let subtitle: String?
@@ -22,13 +23,12 @@ open class Mark: NSObject, MKAnnotation {
     public let vehicle: Vehicle?
     
     var image: UIImage?
-    var type: MarkType
+    var kind: Kind
     var rotation: Int = 0
-    var forced = false
 
     init( stop: Stop ) {
         self.coordinate = stop.coordinate
-        self.type = .stop
+        self.kind = .stop
         self.title = stop.name
         self.subtitle = stop.id
         self.stop = stop
@@ -39,7 +39,7 @@ open class Mark: NSObject, MKAnnotation {
 
     init( vehicle: Vehicle ) {
         self.coordinate = vehicle.coordinate
-        self.type = .vehicle
+        self.kind = .vehicle
         self.title = vehicle.id
         self.subtitle = vehicle.status
         self.vehicle = vehicle
@@ -55,7 +55,7 @@ open class Mark: NSObject, MKAnnotation {
     }
     
     override open var description: String {
-        return( "(Mark:\(type) \"\(title ?? "No title")\" super[\(super.description)])")
+        return( "(Mark:\(kind) \"\(title ?? "No title")\" super[\(super.description)])")
     }
 }
 

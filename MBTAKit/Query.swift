@@ -71,6 +71,10 @@ open class Query: Hashable, CustomStringConvertible {
     public var description: String {
         return( "Query[\(kind)] \(statusDescription)")
     }
+    
+    public var isPending: Bool {
+        return received == nil
+    }
 
     // The URL is used to distinguish queries
     static public func == ( lhs: Query, rhs: Query ) -> Bool {

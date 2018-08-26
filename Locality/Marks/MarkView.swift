@@ -36,19 +36,19 @@ class MarkView: MKAnnotationView {
     }
     
     override public var description: String {
-        return( "[CustomAnnotationView: isEnabled=\(isEnabled);isDraggable:\(isDraggable);super:\(super.description)]" )
+        return( "[MarkView: isEnabled=\(isEnabled);isDraggable:\(isDraggable);super:\(super.description)]" )
     }
     
     func updateImage() {
         // Probably won't happen, and it's not a bad thing if it does.  Just ignore it.
-        guard let mark = annotation as? Mark else {
+        guard let mark = mark else {
             print( "Annotation not a Mark: \(String(describing: annotation))")
             return
         }
         
         var newImage : UIImage!
         
-        switch (mark.type) {
+        switch (mark.kind) {
         case .stop:
             newImage = #imageLiteral(resourceName: "stop") // default
             

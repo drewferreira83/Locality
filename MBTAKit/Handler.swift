@@ -91,6 +91,10 @@ open class Handler: NSObject {
             let jxVehicleData = try! decoder.decode(JXVehiclesData.self, from: data)
             query.response = jxVehicleData.export()
             
+        case .predictions:
+            let jxPredictionData = try! decoder.decode(JXPredictionData.self, from: data)
+            query.response = jxPredictionData.export()
+            
         default:
             fatalError( "Don't know how to handle Query \(query.kind)")
         }

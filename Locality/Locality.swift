@@ -17,6 +17,7 @@ public class Locality: NSObject, Listener {
     var routeDict = [String: Route]()
     var handler: Handler!
     var locationService: LocationService!
+    var lastLocation: CLLocationCoordinate2D?
     
     let map: MapManager!
     

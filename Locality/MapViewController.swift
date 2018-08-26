@@ -38,7 +38,7 @@ class MapViewController: UIViewController, MapManager {
         
         // Start functionality.
         locality = Locality( mapManager: self )
-        mapView.delegate = locality
+        mapView.delegate = self
     }
 
     override func didReceiveMemoryWarning() {

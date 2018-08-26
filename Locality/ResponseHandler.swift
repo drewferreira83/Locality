@@ -58,6 +58,16 @@ extension Locality {
             map.add(marks: marks)
             print( "Displayed \(marks.count) vehicles.:")
             
+        case .predictions:
+            guard let predictions = query.response as? [Prediction] else {
+                fatalError( "/predictions returned something unexpected." )
+            }
+            
+            print( "PREDICTIONS:" )
+            for prediction in predictions {
+                print( "  \(prediction)")
+            }
+            
         default:
             print( "Don't know what to do with Query \(query.kind)")
         }
