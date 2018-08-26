@@ -10,15 +10,20 @@ import UIKit
 import MapKit
 
 // Only use these methods to interact with the MKMapView.
-protocol MapService {
+protocol MapManager {
+    func getRegion() -> MKCoordinateRegion
+    
     func set( showUser: Bool )
     func set( region: MKCoordinateRegion )
+    func set( center: CLLocationCoordinate2D )
+    
     func add( marks: [Mark])
     func removeMarks(ofType: MarkType)
     func removeAllMarks()
 }
 
-class MapViewController: UIViewController, MapService {
+class MapViewController: UIViewController, MapManager {
+
     var locality: Locality!
     @IBOutlet weak var mapView: MKMapView!
     @IBAction func reload(_ sender: Any) {
@@ -29,8 +34,10 @@ class MapViewController: UIViewController, MapService {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        mapView.setRegion(Default.Map.region, animated: false)
+        
         // Start functionality.
-        locality = Locality( map: self )
+        locality = Locality( mapManager: self )
         mapView.delegate = locality
     }
 
@@ -54,6 +61,16 @@ class MapViewController: UIViewController, MapService {
         DispatchQueue.main.async {
             self.mapView.setRegion(region, animated: true)
         }
+    }
+    
+    func set( center: CLLocationCoordinate2D ) {
+        DispatchQueue.main.async {
+            self.mapView.setCenter(center, animated: true)
+        }
+    }
+    
+    func getRegion() -> MKCoordinateRegion {
+        return mapView.region
     }
     
     func add( marks: [Mark] ) {

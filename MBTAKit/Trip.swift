@@ -21,4 +21,8 @@ public class Trip: NSObject {
         self.accessible = accessible
         super.init()
     }
+    
+    override public var description: String {
+        return( "[Trip: id=\(id), dir=\(dir), headsign=\(headsign), accessible=\(accessible)]")
+    }
 }

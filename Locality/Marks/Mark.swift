@@ -14,28 +14,41 @@ enum MarkType: String {
 }
 
 open class Mark: NSObject, MKAnnotation {
-    public var coordinate: CLLocationCoordinate2D
-    public var title: String?
-    public var subtitle: String?
+    public let coordinate: CLLocationCoordinate2D
+    public let title: String?
+    public let subtitle: String?
     
-    public var stop: Stop?
-    //public var vehicle: Vehicle?
+    public let stop: Stop?
+    public let vehicle: Vehicle?
     
     var image: UIImage?
-    var imageName: String?
     var type: MarkType
-    var degrees: Int?
+    var rotation: Int = 0
     var forced = false
 
     init( stop: Stop ) {
         self.coordinate = stop.coordinate
         self.type = .stop
-        self.degrees = nil
         self.title = stop.name
         self.subtitle = stop.id
+        self.stop = stop
+        self.vehicle = nil
+        
         super.init()
     }
 
+    init( vehicle: Vehicle ) {
+        self.coordinate = vehicle.coordinate
+        self.type = .vehicle
+        self.title = vehicle.id
+        self.subtitle = vehicle.status
+        self.vehicle = vehicle
+        self.rotation = vehicle.bearing ?? 0
+        self.stop = nil
+
+        super.init()
+        
+    }
     
     deinit {
         image = nil
@@ -51,13 +64,18 @@ open class Mark: NSObject, MKAnnotation {
 
 
 extension UIImage {
-    public func imageRotatedByDegrees(_ degrees: Int, flip: Bool) -> UIImage {
+    public func rotate(byDegrees: Int, flip: Bool = false) -> UIImage {
         /*  TODO:  Need to return a COPY
          if degrees == 0 {
          return( UIImage(ciImage: self.ciImage!))
          }
          */
-        let rads = CGFloat(degrees) / 180.0 * CGFloat(Double.pi)
+        
+        if byDegrees == 0 {
+            return self
+        }
+        
+        let rads = CGFloat(byDegrees) / 180.0 * CGFloat(Double.pi)
         
         // calculate the size of the rotated view's containing box for our drawing space
         let rotatedViewBox = UIView(frame: CGRect(origin: CGPoint.zero, size: size))

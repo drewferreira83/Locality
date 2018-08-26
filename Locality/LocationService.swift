@@ -24,16 +24,15 @@ enum LocationTrigger: Int {
 
 class LocationService: NSObject, CLLocationManagerDelegate {
     //public static let share = LocationService()
-    private static let defaultLocation = CLLocation(latitude: 42.3601, longitude: -71.0589)
 
     fileprivate var locMgr = CLLocationManager()
     fileprivate var userLocation: CLLocation!
     fileprivate var trigger = LocationTrigger.never
     
-    public var listener: LocationListener!
+    public let listener: LocationListener!
     
     public var here: CLLocationCoordinate2D {
-        get { return locMgr.location?.coordinate ?? LocationService.defaultLocation.coordinate }
+        get { return locMgr.location?.coordinate ?? Default.Map.center }
     }
 
     public var isEnabled: Bool {
@@ -47,7 +46,8 @@ class LocationService: NSObject, CLLocationManagerDelegate {
         get {return isEnabled}
     }
     
-    override init() {
+    init( listener: LocationListener ) {
+        self.listener = listener
         userLocation = locMgr.location
         super.init()
 
@@ -129,13 +129,15 @@ extension Locality: LocationListener {
     }
     
     func locationChanged( coordinate: CLLocationCoordinate2D ) {
-        let span = MKCoordinateSpanMake(0.005, 0.005)
-        let region = MKCoordinateRegionMake(coordinate, span)
+        // Update the center of the map.  This function returns before the map is recentered.
+        map.set( center: coordinate )
+
+        // Get the map's region and change the center coordinate.  The Span does not change on user movement.
+        var newRegion = map.getRegion()
+        newRegion.center = coordinate
         
-        map.set(region: region)
-        
-        // Ask for nearby stops
-        let query = Query(kind: .stops, data: region )
+        // Get the stops within the new region.
+        let query = Query(kind: .stops, data: newRegion )
         handler.deliver(query: query)
     }
     

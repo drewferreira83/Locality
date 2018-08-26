@@ -1,5 +1,5 @@
 //
-//  MBTAService.swift
+//  ResponseHandler
 //  Locality
 //
 //  Created by Andrew Ferreira on 8/20/18.
@@ -9,10 +9,10 @@
 import Foundation
 import MapKit
 
-extension Locality: Listener {
+extension Locality {
 
-     // NEVER ON THE MAIN THREAD!!!!
-    public func receive(query: Query) {
+    // NEVER ON THE MAIN THREAD!!!!
+    public func process(query: Query) {
         print( "Received \(query)")
         
         switch query.kind {
@@ -21,7 +21,7 @@ extension Locality: Listener {
                 print( "/stops returned something unexpected.")
                 return
             }
-
+            
             //  Create marks for the stops.
             var marks = [Mark]()
             for stop in stops {
@@ -42,6 +42,21 @@ extension Locality: Listener {
                 routeDict[route.id] = route
             }
             print( "Loaded \(routeDict.count) routes")
+            
+        case .vehicles:
+            guard let vehicles = query.response as? [Vehicle] else {
+                print( "/vehicles returned something unexpected." )
+                return
+            }
+            
+            var marks = [Mark]()
+            for vehicle in vehicles {
+                marks.append( Mark(vehicle: vehicle))
+            }
+            
+            map.removeMarks(ofType: .vehicle)
+            map.add(marks: marks)
+            print( "Displayed \(marks.count) vehicles.:")
             
         default:
             print( "Don't know what to do with Query \(query.kind)")

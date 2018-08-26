@@ -9,24 +9,24 @@
 import Foundation
 import MapKit
 
-public class Locality: NSObject {
+public class Locality: NSObject, Listener {
     let BOSTON = CLLocationCoordinate2D( latitude: 42.36, longitude: -71.062)
 
     static public var share: Locality!
     
     var routeDict = [String: Route]()
-    var handler = Handler()
-    var locationService = LocationService()
+    var handler: Handler!
+    var locationService: LocationService!
     
-    var map: MapService!
+    let map: MapManager!
     
-    init( map: MapService ) {
-        self.map = map
+    init( mapManager: MapManager ) {
+        self.map = mapManager
         super.init()
 
         Locality.share = self
-        handler.listener = self
-        locationService.listener = self
+        handler = Handler( listener: self)
+        locationService = LocationService( listener: self )
 
         //Get routes
         let query = Query(kind: .routes)
@@ -37,4 +37,7 @@ public class Locality: NSObject {
         return( "Locality Core Object, v0.1")
     }
     
+    public func receive(query: Query) {
+        process(query: query)
+    }
 }

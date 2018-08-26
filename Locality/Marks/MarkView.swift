@@ -14,6 +14,10 @@ import MapKit
 class MarkView: MKAnnotationView {
     static let Identifier = "MarkView"
     
+    var mark: Mark? {
+        return annotation as? Mark
+    }
+    
     init( mark: Mark ) {
         super.init(annotation: mark, reuseIdentifier: MarkView.Identifier)
         
@@ -50,9 +54,7 @@ class MarkView: MKAnnotationView {
             
         case .vehicle:
             newImage = #imageLiteral(resourceName: "chevron")
-            if let degrees = mark.degrees {
-                newImage = newImage.imageRotatedByDegrees(degrees, flip: false )
-            }
+            newImage = newImage.rotate( byDegrees: mark.rotation)
         }
         self.image = newImage
     }

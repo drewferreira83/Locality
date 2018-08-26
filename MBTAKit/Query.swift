@@ -34,6 +34,8 @@ open class Query: Hashable, CustomStringConvertible {
         case stops
         case trips
         case vehicles
+        
+        case outstanding
 
         case error
     }

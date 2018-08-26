@@ -1,5 +1,5 @@
 //
-//  Stop.swift
+//  JXStop.swift
 //  Locality
 //
 //  Created by Andrew Ferreira on 8/17/18.

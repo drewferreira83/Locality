@@ -35,8 +35,7 @@ extension Locality: MKMapViewDelegate {
     //  If you do select it programmatically, call this function also.
     public func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
         if let markView = view as? MarkView {
-            print( "Selected \(markView.description)")
-            // didSelect( markView: markView)
+            didSelect( markView: markView )
         }
     }
     
@@ -64,46 +63,22 @@ extension Locality: MKMapViewDelegate {
             view.canShowCallout = !(view.annotation is MKUserLocation)
         }
     }
-    /*
-    // Drag support
     
-    func mapView(_ mapView: MKMapView, annotationView view: MKAnnotationView, didChange newState: MKAnnotationViewDragState, fromOldState oldState: MKAnnotationViewDragState) {
-        
-        switch newState {
-        case .starting:
-            view.dragState = .dragging
-            
-        case .ending:
-            view.dragState = .none
-            
-            // The only one that can be dragged is the focus annotation.
-            if let focusAnno = view.annotation as? FocusAnnotation {
-                Core.id.doSearch( here: focusAnno.coordinate)
+    func didSelect( markView: MarkView ) {
+        guard let mark = markView.mark else {
+            fatalError( "MarkView doesn't have a Mark annotation? \(markView)")
+        }
+        switch mark.type {
+        case .stop:
+            guard let stop = mark.stop else {
+                fatalError( "No Stop data for Mark \(mark)")
             }
-            
-        case .canceling:
-            view.dragState = .none
-            
+            let query = Query(kind: .vehicles, data: stop)
+            handler.deliver(query: query)
         default:
-            break
+            print( "Selected \(markView), but ignored" )
         }
     }
-    
-    
-    
-     // This animates the stops and vehicles dropping onto the map - this is not
-     // attractive.
-     func mapView(_ mapView: MKMapView, didAdd views: [MKAnnotationView]) {
-     for view in views {
-     if let customAV = view as? CustomAnnotationView {
-     if customAV.customAnnotation?.type == .vehicle {
-     let endFrame = view.frame
-     view.frame = endFrame.offsetBy(dx: 0, dy: -1000 )
-     UIView.animate( withDuration: 0.5, animations: { view.frame = endFrame } )
-     }
-     }
-     }
-     }
-     */
+
     
 }

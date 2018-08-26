@@ -19,34 +19,36 @@ public protocol Listener {
     func receive(query: Query) -> Void
 }
 
-open class Handler: CustomStringConvertible {
+open class Handler: NSObject {
+    
+
     fileprivate let decoder = JSONDecoder()
-    var listener: Listener!
+    let listener: Listener
     var activeQueries = QueryTracker()
     
-    public init(  ) {
-
+    public init( listener: Listener ) {
+        self.listener = listener
+        super.init()
     }
     
-    public var description: String {
-        return "Version 3.0, August 2018"
-    }
     
     // Main App Access point
     @discardableResult public func deliver(query: Query) -> Bool {
-        guard listener != nil else {
-            fatalError( "No one is listening.")
+        if query.kind == .outstanding {
+            print( ".outstanding query not implemented yet." )
+            return false
         }
-        
 
         if let url = MURL.makeURL(query: query) {
             print( "***Issuing \(url)")
-            // Create and issue request.
-            URLSession.shared.dataTask(with: url, completionHandler: responseHandler).resume()
 
             // Update and track Query.
             query.issued = Date()
             activeQueries.track(query: query)
+
+            // Create and issue request.
+            URLSession.shared.dataTask(with: url, completionHandler: responseHandler).resume()
+
             return( true )
         }
         
@@ -85,6 +87,10 @@ open class Handler: CustomStringConvertible {
             let jxRoutesData = try! decoder.decode(JXRoutesData.self, from: data)
             query.response = jxRoutesData.export()
             
+        case .vehicles:
+            let jxVehicleData = try! decoder.decode(JXVehiclesData.self, from: data)
+            query.response = jxVehicleData.export()
+            
         default:
             fatalError( "Don't know how to handle Query \(query.kind)")
         }
@@ -92,4 +98,8 @@ open class Handler: CustomStringConvertible {
         listener.receive(query: query)
     }
     
+    override open var description: String {
+        return "Version 3.0, August 2018"
+    }
+
 }

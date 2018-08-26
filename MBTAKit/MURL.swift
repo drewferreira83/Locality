@@ -25,21 +25,16 @@ class MURL {
         switch ( query.kind )
         {
         case .stops:
-            // If the data is a coordinate
-            if let coordinate = query.data as? CLLocationCoordinate2D {
-                baseString.append( "stops")
-                baseString.append( MBTA_KEY )
-                baseString.append( "&filter[latitude]=\(coordinate.latitude)&filter[longitude]=\(coordinate.longitude)" )
-                break
-            }
             
+            // If there is a region, use the center and get nearby stops
             if let region = query.data as? MKCoordinateRegion {
                 let center = region.center
                 let radius = region.maxDelta
                 
                 baseString.append( "stops")
                 baseString.append( MBTA_KEY )
-                baseString.append( "&filter[latitude]=\(center.latitude)&filter[longitude]=\(center.longitude)" )
+                baseString.append( "&filter[latitude]=\(center.latitude)" )
+                baseString.append( "&filter[longitude]=\(center.longitude)" )
                 baseString.append( "&filter[radius]=\(radius)" )
                 break
             }
@@ -58,8 +53,31 @@ class MURL {
             
         case .routes:
             // Routes takes either no arg
-            baseString.append( "routes?" )
+            baseString.append( "routes" )
             baseString.append( MBTA_KEY )
+            
+        case .trips:
+            // Trips take a tripID.
+            if let tripID = query.data as? String {
+                baseString.append( "trips" )
+                baseString.append( MBTA_KEY)
+                baseString.append( "&filter[id]=\(tripID)")
+                break
+                
+            }
+            
+            print( "ERROR: Trips expected a tripID" )
+            return nil
+            
+        case .vehicles:
+            // If the data is a Stop
+            if let stop = query.data as? Stop {
+                baseString.append( "vehicles" )
+                baseString.append( MBTA_KEY)
+                baseString.append( "&filter[route]=Red")
+                break
+            }
+            
             
         default:
             print( "Don't know how to make URL for '\(query.kind)")
@@ -79,6 +97,7 @@ class MURL {
 }
 
 extension MKCoordinateRegion {
+    // Return the larger of the width or height of the region.
     public var maxDelta: Double {
         return max( span.latitudeDelta, span.longitudeDelta )
     }
