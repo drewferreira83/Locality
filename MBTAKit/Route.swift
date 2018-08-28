@@ -23,14 +23,13 @@ public class Route: NSObject {
     }
     
     public let id: String
-    public let descr: String
+    public let about: String
     public let type: Int
     public let shortName: String
     public let longName: String
     public let color: UIColor
     public let textColor: UIColor
     public let directions: [String]
-    public let attributes: Attributes
     
     init( source: JXObject ) {
         self.id = source.id
@@ -38,14 +37,13 @@ public class Route: NSObject {
             fatalError( "Route could not get attributes from JXObject. \(source)")
         }
         
-        descr = attributes.description
-        type = attributes.type
-        color = UIColor( hex: attributes.color )
-        textColor = UIColor( hex: attributes.text_color)
-        shortName = attributes.short_name
-        longName = attributes.long_name
-        directions = attributes.direction_names
-        self.attributes = attributes
+        self.about = attributes.description
+        self.type = attributes.type
+        self.color = UIColor( hex: attributes.color )
+        self.textColor = UIColor( hex: attributes.text_color)
+        self.shortName = attributes.short_name
+        self.longName = attributes.long_name
+        self.directions = attributes.direction_names
         
         super.init()
     }

@@ -26,11 +26,11 @@ extension Locality {
             var marks = [Mark]()
             for stop in stops {
                 // Ignore child stations.
-                if stop.parentStop == nil {
+                if stop.parentID == nil {
                     marks.append(Mark(stop: stop))
                 }
             }
-            map.removeAllMarks()
+            map.removeMarks(ofKind: .stop)
             map.add(marks: marks)
             
         case .routes:

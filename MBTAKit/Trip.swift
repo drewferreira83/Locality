@@ -13,14 +13,31 @@ public class Trip: NSObject {
     let dir: Int
     let headsign: String
     let accessible: Int
-    let routeID: String?
     
-    init( id: String, dir: Int, routeID: String?, headsign: String, accessible: Int ) {
-        self.id = id
-        self.dir = dir
+    let routeID: String
+    var route: Route!
+    
+    struct Attributes: Decodable {
+        let block_id: String?
+        let direction_id: Int
+        let headsign: String
+        let name: String
+        let wheelchair_accessible: Int
+    }
+
+    init( source: JXObject ) {
+        guard let attributes = source.attributes as? Attributes else {
+            fatalError( "Trip could not interpret attributes. \(source) ")
+        }
+        
+        self.id = source.id
+        self.dir = attributes.direction_id
+        self.headsign = attributes.headsign
+        self.accessible = attributes.wheelchair_accessible
+        guard let routeID = source.relatedID( key: "route" ) else {
+            fatalError( "Trip source did not have Route ID. \(source)")
+        }
         self.routeID = routeID
-        self.headsign = headsign
-        self.accessible = accessible
         super.init()
     }
     

@@ -27,6 +27,7 @@ class MURL {
         case .stops:
             baseString.append( "/stops")
             baseString.append( MBTA_KEY )
+            baseString.append( "&include=parent_station" )
 
             // If there is a region, use the center and get nearby stops
             if let region = query.data as? MKCoordinateRegion {
@@ -77,6 +78,11 @@ class MURL {
             baseString.append( "/vehicles" )
             baseString.append( MBTA_KEY)
 
+            // No data means get all.
+            if query.data == nil {
+                break
+            }
+            
             // Valid parameters are Route and Vehicle ID
             if let route = query.data as? Route {
                 baseString.append( "&filter[route]=\(route.id)")
@@ -99,7 +105,7 @@ class MURL {
             baseString.append( MBTA_KEY )
             
             if let stop = query.data as? Stop {
-                baseString.append( "&include=route,stop,trip" )
+                baseString.append( "&include=route,stop,trip,vehicle" )
                 baseString.append( "&filter[stop]=\(stop.id)")
                 break
             }

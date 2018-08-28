@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		3A142DDB21319BA700242051 /* Stop.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A142DDA21319BA700242051 /* Stop.swift */; };
 		3A32E28621345BB900C720F0 /* JXObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A32E28521345BB900C720F0 /* JXObject.swift */; };
-		3A32E288213467DC00C720F0 /* JXError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A32E287213467DC00C720F0 /* JXError.swift */; };
 		3A4D883C2131A10F00409685 /* Route.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A4D883B2131A10F00409685 /* Route.swift */; };
 		3A63DCB521332F1A005E619B /* Prediction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A63DCB421332F1A005E619B /* Prediction.swift */; };
 		3A63DCB721333378005E619B /* DateParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A63DCB621333378005E619B /* DateParser.swift */; };
@@ -36,7 +35,6 @@
 /* Begin PBXFileReference section */
 		3A142DDA21319BA700242051 /* Stop.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Stop.swift; sourceTree = "<group>"; };
 		3A32E28521345BB900C720F0 /* JXObject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JXObject.swift; sourceTree = "<group>"; };
-		3A32E287213467DC00C720F0 /* JXError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JXError.swift; sourceTree = "<group>"; };
 		3A4D883B2131A10F00409685 /* Route.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Route.swift; sourceTree = "<group>"; };
 		3A63DCB421332F1A005E619B /* Prediction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Prediction.swift; sourceTree = "<group>"; };
 		3A63DCB621333378005E619B /* DateParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateParser.swift; sourceTree = "<group>"; };
@@ -74,20 +72,11 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		3A142DD92131995000242051 /* JSON Decoding */ = {
-			isa = PBXGroup;
-			children = (
-				3A32E28521345BB900C720F0 /* JXObject.swift */,
-				3A32E287213467DC00C720F0 /* JXError.swift */,
-			);
-			path = "JSON Decoding";
-			sourceTree = "<group>";
-		};
 		3A65513D212718E4007EF78B /* MBTAKit */ = {
 			isa = PBXGroup;
 			children = (
-				3A142DD92131995000242051 /* JSON Decoding */,
 				3A65513B212716D0007EF78B /* Handler.swift */,
+				3A32E28521345BB900C720F0 /* JXObject.swift */,
 				3A65513E21271A96007EF78B /* MURL.swift */,
 				3AB902EC212865090042284C /* Query.swift */,
 				3A142DDA21319BA700242051 /* Stop.swift */,
@@ -242,7 +231,6 @@
 				6A263A822124655400B1D470 /* AppDelegate.swift in Sources */,
 				3AE927F7212C5F2200BB68A6 /* Locality.swift in Sources */,
 				3A63DCB721333378005E619B /* DateParser.swift in Sources */,
-				3A32E288213467DC00C720F0 /* JXError.swift in Sources */,
 				3AB6D4FD2131BA1500E73C0E /* Trip.swift in Sources */,
 				3A760E40213042DF00172F69 /* Mark.swift in Sources */,
 			);

@@ -86,24 +86,17 @@ open class Handler: NSObject {
             fatalError( "Decoder got no data." )
         }
 
+        if jxTopData.count == 0 {
+            print( "Query returned no objects.")
+        }
         
-        // TODO:  Complete processing of attributes for each type of object returned.
-        // Modify exposed classes to take JXObject!  stop = Stop( element )
         switch (query.kind) {
 
         case .stops:
             var stops = [Stop]()
             
             for element in jxTopData {
-                let stop = Stop(source: element)
-                
-                // If the stop has a parentID, then look for any included info.
-                if let parentID = stop.parentID, let jxParentObject = jxTop.search(forKind: .stop, id: parentID) {
-                    // Store the parent stop information
-                    stop.parentStop = Stop(source: jxParentObject)
-                }
-
-                stops.append( stop )
+                stops.append( Stop( source: element ) )
             }
             query.response = stops
             
@@ -115,11 +108,20 @@ open class Handler: NSObject {
             }
             
             query.response = routes
-            /*
+            
         case .vehicles:
-            let jxVehicleData = try! decoder.decode(JXVehiclesData.self, from: data)
-            query.response = jxVehicleData.export()
-*/
+            var vehicles = [Vehicle]()
+            
+            for element in jxTopData {
+                if element.attributes == nil {
+                    print( "No Attributes for vehicle \(element.id)")
+                    continue
+                }
+                vehicles.append( Vehicle( source: element ) )
+            }
+            
+            query.response = vehicles
+            
         case .predictions:
             var predictions = [Prediction]()
             
@@ -136,6 +138,8 @@ open class Handler: NSObject {
                     fatalError( "Predictions did not include stop data. \(element)")
                 }
                 prediction.stop = Stop( source: jxStopObject )
+                
+
                 
                 predictions.append( prediction )
             }

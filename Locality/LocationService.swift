@@ -139,6 +139,7 @@ extension Locality: LocationListener {
         map.set( center: coordinate )
 
         // Get the map's region and change the center coordinate.  The Span does not change on user movement.
+        // It is not sufficient to call refreshStops because the map hasn't updated its region yet from the set(center:) command.
         var newRegion = map.getRegion()
         newRegion.center = coordinate
         
@@ -147,6 +148,12 @@ extension Locality: LocationListener {
         handler.deliver(query: query)
     }
     
+    
+    func refreshStops() {
+        // This gets stops that fit in current map.
+        let query = Query( kind: .stops, data: map.getRegion() )
+        handler.deliver(query: query)
+    }
 }
 
 

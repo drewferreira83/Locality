@@ -13,7 +13,15 @@ import Foundation
 typealias StringDictionary = [String:String]
 
 struct JXDataBlock: Decodable {
-    let data: StringDictionary
+    let data: StringDictionary?
+}
+
+struct JXError: Decodable {
+    let title: String?
+    let status: String?
+    let code: String?
+    let detail: String?
+    let source: [String:String]?
 }
 
 typealias Relationships = [String: JXDataBlock]
@@ -41,25 +49,6 @@ struct JXTop: Decodable {
 }
 
 class JXObject: Decodable {
-    class AttrTrip: Decodable {
-        let block_id: String
-        let direction_id: Int
-        let headsign: String
-        let name: String
-        let wheelchair_accessible: Int
-    }
-    
-    class AttrVehicle: Decodable {
-        let bearing: Int?
-        let current_status: String
-        let current_stop_sequence: Int?
-        let direction_id: Int
-        let latitude: Double
-        let longitude: Double
-        let speed: Double?
-        // let updated_at: Date
-    }
-    
     
     enum Kind: String {
         case route, stop, trip, vehicle, prediction
@@ -98,11 +87,11 @@ class JXObject: Decodable {
         case .route:
             attributes = try? container.decode(Route.Attributes.self, forKey: .attributes)
         case .trip:
-            attributes = try? container.decode( AttrTrip.self, forKey: .attributes)
+            attributes = try? container.decode( Trip.Attributes.self, forKey: .attributes)
         case .stop:
             attributes = try? container.decode( Stop.Attributes.self, forKey: .attributes)
         case .vehicle:
-            attributes = try? container.decode(AttrVehicle.self, forKey: .attributes )
+            attributes = try? container.decode( Vehicle.Attributes.self, forKey: .attributes )
         case .prediction:
             attributes = try? container.decode(Prediction.Attributes.self, forKey: .attributes )
             /*
@@ -110,8 +99,15 @@ class JXObject: Decodable {
             attributes = try? container.decode( JXSchedule.Attributes.self, forKey: .attributes )
              */
         }
+        
+        if attributes == nil {
+            print( "WARNING: JXObject has no attributes. \(self.id)" )
+        }
     }
 
+    public func relatedID( key: String ) -> String? {
+        return relationships?[key]?.data?["id"]
+    }
 
 }
     

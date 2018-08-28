@@ -28,7 +28,7 @@ class MapViewController: UIViewController, MapManager {
     @IBOutlet weak var mapView: MKMapView!
     @IBAction func reload(_ sender: Any) {
         // Request should go to Locality object
-        //LocationService.share.update()
+        locality.refreshStops()
     }
     
     override func viewDidLoad() {

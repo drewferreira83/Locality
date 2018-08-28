@@ -27,11 +27,10 @@ public class Stop: NSObject {
     public let id: String
     public let name: String
     public let coordinate: CLLocationCoordinate2D
-    public let attributes: Attributes
     
     // Optional
     public var parentID: String?
-    public var parentStop: Stop?
+    //public var parentStop: Stop?
     
     init( source: JXObject ) {
         self.id = source.id
@@ -41,9 +40,8 @@ public class Stop: NSObject {
         
         self.name = attributes.name
         self.coordinate = CLLocationCoordinate2DMake(attributes.latitude, attributes.longitude)
-        self.attributes = attributes
         
-        self.parentID = source.relationships?["parent_station"]?.data["id"]
+        self.parentID = source.relatedID(key: "parent_station")
         
         super.init()
     }

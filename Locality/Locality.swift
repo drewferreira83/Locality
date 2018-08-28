@@ -28,11 +28,7 @@ public class Locality: NSObject, Listener {
         Locality.share = self
         handler = Handler( listener: self)
         locationService = LocationService( listener: self )
-
-        //Get routes
-        let query = Query(kind: .routes)
-        handler.deliver(query: query)
-    }
+   }
     
     override public var description: String {
         return( "Locality Core Object, v0.1")
