@@ -47,7 +47,7 @@ struct JXPrediction: Decodable {
             return data["id"] ?? ""
         }
     }
-    
+
     struct Relationships: Decodable {
         let route: RelationshipElement
         let stop: RelationshipElement

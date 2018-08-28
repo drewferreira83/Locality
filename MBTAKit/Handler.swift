@@ -78,23 +78,70 @@ open class Handler: NSObject {
 
         query.received = Date()
         
+        let jxTop = try! decoder.decode(JXTop.self, from: data)
+        guard jxTop.errors == nil else {
+            fatalError( "Error reported: \(jxTop.errors!)")
+        }
+        guard let jxTopData = jxTop.data else {
+            fatalError( "Decoder got no data." )
+        }
+
+        
+        // TODO:  Complete processing of attributes for each type of object returned.
+        // Modify exposed classes to take JXObject!  stop = Stop( element )
         switch (query.kind) {
+
         case .stops:
-            let jxStopsData = try! decoder.decode( JXStopsData.self , from: data)
-            query.response = jxStopsData.export()
+            var stops = [Stop]()
+            
+            for element in jxTopData {
+                let stop = Stop(source: element)
+                
+                // If the stop has a parentID, then look for any included info.
+                if let parentID = stop.parentID, let jxParentObject = jxTop.search(forKind: .stop, id: parentID) {
+                    // Store the parent stop information
+                    stop.parentStop = Stop(source: jxParentObject)
+                }
+
+                stops.append( stop )
+            }
+            query.response = stops
             
         case .routes:
-            let jxRoutesData = try! decoder.decode(JXRoutesData.self, from: data)
-            query.response = jxRoutesData.export()
+            var routes = [Route]()
             
+            for element in jxTopData {
+                routes.append( Route(source: element) )
+            }
+            
+            query.response = routes
+            /*
         case .vehicles:
             let jxVehicleData = try! decoder.decode(JXVehiclesData.self, from: data)
             query.response = jxVehicleData.export()
-            
+*/
         case .predictions:
-            let jxPredictionData = try! decoder.decode(JXPredictionData.self, from: data)
-            query.response = jxPredictionData.export()
+            var predictions = [Prediction]()
             
+            for element in jxTopData {
+                let prediction = Prediction( source: element )
+                
+                // Now create and store Route, Stop, and Trip info
+                guard let jxRouteObject = jxTop.search(forKind: .route, id: prediction.routeID) else {
+                    fatalError( "Predictions did not include route data. \(element)")
+                }
+                prediction.route = Route( source: jxRouteObject )
+                
+                guard let jxStopObject = jxTop.search(forKind: .stop, id: prediction.stopID) else {
+                    fatalError( "Predictions did not include stop data. \(element)")
+                }
+                prediction.stop = Stop( source: jxStopObject )
+                
+                predictions.append( prediction )
+            }
+            
+            query.response = predictions
+
         default:
             fatalError( "Don't know how to handle Query \(query.kind)")
         }
@@ -107,3 +154,5 @@ open class Handler: NSObject {
     }
 
 }
+
+

@@ -16,7 +16,7 @@ class MURL {
    
     // Command one of: vehicles, trips, stops, schedules, routes, predictions, alerts
     
-    static let URL_HEAD = "https://api-v3.mbta.com/"
+    static let URL_HEAD = "https://api-v3.mbta.com"
     static let MBTA_KEY = "?api_key=0de754c34a1445aeac7cbc2c385ef0ae"
     
     static func makeURL(query: Query) -> URL? {
@@ -25,7 +25,7 @@ class MURL {
         switch ( query.kind )
         {
         case .stops:
-            baseString.append( "stops")
+            baseString.append( "/stops")
             baseString.append( MBTA_KEY )
 
             // If there is a region, use the center and get nearby stops
@@ -45,15 +45,18 @@ class MURL {
                 break
             }
             
-            fatalError( "Stops query requires an ID, coordiante, or region. Data=\(String(describing:query.data))" )
+            fatalError( "Stops query requires an ID or region. Data=\(String(describing:query.data))" )
             
         case .routes:
-            // Routes takes either no arg
-            baseString.append( "routes" )
+            // Routes takes either no arg or an id
+            baseString.append( "/routes" )
             baseString.append( MBTA_KEY )
-            
+            if let routeID = query.data as? String {
+                baseString.append( "&filter[id]=\(routeID)" )
+            }
+
         case .trips:
-            baseString.append( "trips" )
+            baseString.append( "/trips" )
             baseString.append( MBTA_KEY)
 
             // Trips take a tripID.
@@ -71,7 +74,7 @@ class MURL {
             fatalError( "Trips query requires an ID or Route. data=\(String(describing:query.data))")
             
         case .vehicles:
-            baseString.append( "vehicles" )
+            baseString.append( "/vehicles" )
             baseString.append( MBTA_KEY)
 
             // Valid parameters are Route and Vehicle ID
@@ -92,10 +95,11 @@ class MURL {
             fatalError( "Vehicle Query requires an ID, Route, or Trip.  data=\(String(describing: query.data))")
             
         case .predictions:
-            baseString.append("predictions")
+            baseString.append("/predictions")
             baseString.append( MBTA_KEY )
             
             if let stop = query.data as? Stop {
+                baseString.append( "&include=route,stop,trip" )
                 baseString.append( "&filter[stop]=\(stop.id)")
                 break
             }
@@ -105,6 +109,7 @@ class MURL {
         default:
             fatalError( "Unsupported query: \(query.kind)" )
         }
+        
         
         guard let url = URL( string: baseString ) else {
             fatalError( "Failed to create URL from \(baseString)" )

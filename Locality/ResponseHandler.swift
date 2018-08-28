@@ -26,7 +26,7 @@ extension Locality {
             var marks = [Mark]()
             for stop in stops {
                 // Ignore child stations.
-                if stop.parentStation == nil {
+                if stop.parentStop == nil {
                     marks.append(Mark(stop: stop))
                 }
             }
@@ -54,7 +54,7 @@ extension Locality {
                 marks.append( Mark(vehicle: vehicle))
             }
             
-            map.removeMarks(ofType: .vehicle)
+            map.removeMarks(ofKind: .vehicle)
             map.add(marks: marks)
             print( "Displayed \(marks.count) vehicles.:")
             

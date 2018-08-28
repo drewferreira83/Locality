@@ -18,7 +18,7 @@ protocol MapManager {
     func set( center: CLLocationCoordinate2D )
     
     func add( marks: [Mark])
-    func removeMarks(ofType: MarkType)
+    func removeMarks(ofKind: Mark.Kind)
     func removeAllMarks()
 }
 
@@ -79,11 +79,11 @@ class MapViewController: UIViewController, MapManager {
         }
     }
     
-    func removeMarks(ofType: MarkType) {
+    func removeMarks(ofKind: Mark.Kind) {
         var matchingMarks = [Mark]()
         for annotation in mapView.annotations {
             if let mark = annotation as? Mark {
-                if mark.type == ofType  {
+                if mark.kind == ofKind  {
                     matchingMarks.append( mark )
                 }
             }

@@ -10,6 +10,18 @@ import Foundation
 import UIKit
 
 public class Route: NSObject {
+    
+    public struct Attributes: Decodable {
+        let color: String
+        let description: String
+        let direction_names: [String]
+        let long_name: String
+        let short_name: String
+        let sort_order: Int
+        let text_color: String
+        let type: Int
+    }
+    
     public let id: String
     public let descr: String
     public let type: Int
@@ -18,9 +30,14 @@ public class Route: NSObject {
     public let color: UIColor
     public let textColor: UIColor
     public let directions: [String]
+    public let attributes: Attributes
     
-    init( id: String, attributes: JXRoute.Attributes ) {
-        self.id = id
+    init( source: JXObject ) {
+        self.id = source.id
+        guard let attributes = source.attributes as? Attributes else {
+            fatalError( "Route could not get attributes from JXObject. \(source)")
+        }
+        
         descr = attributes.description
         type = attributes.type
         color = UIColor( hex: attributes.color )
@@ -28,6 +45,7 @@ public class Route: NSObject {
         shortName = attributes.short_name
         longName = attributes.long_name
         directions = attributes.direction_names
+        self.attributes = attributes
         
         super.init()
     }

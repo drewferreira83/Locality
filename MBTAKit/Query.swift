@@ -26,6 +26,7 @@ open class Query: Hashable, CustomStringConvertible {
         return id
     }
     
+    // Do not confuse with JXObject.Kind
     public enum Kind: String {
         case alert
         case predictions
