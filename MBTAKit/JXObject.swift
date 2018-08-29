@@ -26,19 +26,14 @@ struct JXError: Decodable {
 
 typealias Relationships = [String: JXDataBlock]
 
-struct JXTop: Decodable {
-    let jsonapi: StringDictionary?
-    let data: [JXObject]?
-    let included: [JXObject]?
-    let links: StringDictionary?
-    let errors: JXError?
-    
-    func search( forKind: JXObject.Kind, id: String ) -> JXObject? {
-        if included == nil {
+// Search functionality on arrays of JXObjects
+extension Array where Element == JXObject {
+    func search( forKind: JXObject.Kind, id: String? ) -> JXObject? {
+        if id == nil {
             return nil
         }
         
-        for element in included! {
+        for element in self {
             if element.kind == forKind && element.id == id {
                 return element
             }
@@ -46,6 +41,14 @@ struct JXTop: Decodable {
         
         return nil
     }
+}
+
+struct JXTop: Decodable {
+    let jsonapi: StringDictionary?
+    let data: [JXObject]?
+    let included: [JXObject]?
+    let links: StringDictionary?
+    let errors: JXError?
 }
 
 class JXObject: Decodable {

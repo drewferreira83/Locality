@@ -126,21 +126,12 @@ open class Handler: NSObject {
             var predictions = [Prediction]()
             
             for element in jxTopData {
-                let prediction = Prediction( source: element )
-                
-                // Now create and store Route, Stop, and Trip info
-                guard let jxRouteObject = jxTop.search(forKind: .route, id: prediction.routeID) else {
-                    fatalError( "Predictions did not include route data. \(element)")
+                guard let included = jxTop.included else {
+                    fatalError( "Prediction request did not have included data. \(jxTop)")
                 }
-                prediction.route = Route( source: jxRouteObject )
+                let prediction = Prediction( source: element, included: included )
                 
-                guard let jxStopObject = jxTop.search(forKind: .stop, id: prediction.stopID) else {
-                    fatalError( "Predictions did not include stop data. \(element)")
-                }
-                prediction.stop = Stop( source: jxStopObject )
-                
-
-                
+          
                 predictions.append( prediction )
             }
             

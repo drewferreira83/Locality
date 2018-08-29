@@ -11,7 +11,7 @@
 		3A32E28621345BB900C720F0 /* JXObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A32E28521345BB900C720F0 /* JXObject.swift */; };
 		3A4D883C2131A10F00409685 /* Route.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A4D883B2131A10F00409685 /* Route.swift */; };
 		3A63DCB521332F1A005E619B /* Prediction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A63DCB421332F1A005E619B /* Prediction.swift */; };
-		3A63DCB721333378005E619B /* DateParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A63DCB621333378005E619B /* DateParser.swift */; };
+		3A63DCB721333378005E619B /* DateFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A63DCB621333378005E619B /* DateFactory.swift */; };
 		3A65513C212716D0007EF78B /* Handler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A65513B212716D0007EF78B /* Handler.swift */; };
 		3A65513F21271A96007EF78B /* MURL.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A65513E21271A96007EF78B /* MURL.swift */; };
 		3A760E40213042DF00172F69 /* Mark.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A760E3F213042DF00172F69 /* Mark.swift */; };
@@ -37,7 +37,7 @@
 		3A32E28521345BB900C720F0 /* JXObject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JXObject.swift; sourceTree = "<group>"; };
 		3A4D883B2131A10F00409685 /* Route.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Route.swift; sourceTree = "<group>"; };
 		3A63DCB421332F1A005E619B /* Prediction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Prediction.swift; sourceTree = "<group>"; };
-		3A63DCB621333378005E619B /* DateParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateParser.swift; sourceTree = "<group>"; };
+		3A63DCB621333378005E619B /* DateFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateFactory.swift; sourceTree = "<group>"; };
 		3A65513B212716D0007EF78B /* Handler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Handler.swift; sourceTree = "<group>"; };
 		3A65513E21271A96007EF78B /* MURL.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MURL.swift; sourceTree = "<group>"; };
 		3A760E3F213042DF00172F69 /* Mark.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Mark.swift; sourceTree = "<group>"; };
@@ -81,7 +81,7 @@
 				3AB902EC212865090042284C /* Query.swift */,
 				3A142DDA21319BA700242051 /* Stop.swift */,
 				3AB6D5012131F9CC00E73C0E /* Vehicle.swift */,
-				3A63DCB621333378005E619B /* DateParser.swift */,
+				3A63DCB621333378005E619B /* DateFactory.swift */,
 				3A4D883B2131A10F00409685 /* Route.swift */,
 				3A63DCB421332F1A005E619B /* Prediction.swift */,
 				3AB6D4FC2131BA1500E73C0E /* Trip.swift */,
@@ -230,7 +230,7 @@
 				3A32E28621345BB900C720F0 /* JXObject.swift in Sources */,
 				6A263A822124655400B1D470 /* AppDelegate.swift in Sources */,
 				3AE927F7212C5F2200BB68A6 /* Locality.swift in Sources */,
-				3A63DCB721333378005E619B /* DateParser.swift in Sources */,
+				3A63DCB721333378005E619B /* DateFactory.swift in Sources */,
 				3AB6D4FD2131BA1500E73C0E /* Trip.swift in Sources */,
 				3A760E40213042DF00172F69 /* Mark.swift in Sources */,
 			);

@@ -52,6 +52,7 @@ class MURL {
             // Routes takes either no arg or an id
             baseString.append( "/routes" )
             baseString.append( MBTA_KEY )
+            baseString.append("&sort=sort_order")
             if let routeID = query.data as? String {
                 baseString.append( "&filter[id]=\(routeID)" )
             }
@@ -105,12 +106,13 @@ class MURL {
             baseString.append( MBTA_KEY )
             
             if let stop = query.data as? Stop {
+                baseString.append( "&sort=departure_time")
                 baseString.append( "&include=route,stop,trip,vehicle" )
                 baseString.append( "&filter[stop]=\(stop.id)")
                 break
             }
             
-            fatalError( "Prediction Query requires a coordinate, Stop, Route, or Trip. data=\(String(describing:query.data))")
+            fatalError( "Prediction Query requires Stop. data=\(String(describing:query.data))")
             
         default:
             fatalError( "Unsupported query: \(query.kind)" )
