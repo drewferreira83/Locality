@@ -8,8 +8,10 @@
 
 import UIKit
 
-class PredictionViewController: UITableViewController {
+class PredictionViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
 
+    @IBOutlet weak var predictionTable: UITableView!
+    @IBOutlet weak var navBar: UINavigationBar!
     var predictions: [Prediction]!
     
     override func viewDidLoad() {
@@ -19,6 +21,9 @@ class PredictionViewController: UITableViewController {
 
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem
+        
+        predictionTable.delegate = self
+        predictionTable.dataSource = self
     }
 
     override func didReceiveMemoryWarning() {
@@ -28,16 +33,16 @@ class PredictionViewController: UITableViewController {
 
     // MARK: - Table view data source
 
-    override func numberOfSections(in tableView: UITableView) -> Int {
+    func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
 
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
     
         return predictions.count
     }
 
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "PredictionCell", for: indexPath) as! PredictionCell
 
         let prediction = predictions[ indexPath.row ]
