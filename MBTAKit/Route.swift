@@ -31,6 +31,17 @@ public class Route: NSObject {
     public let textColor: UIColor
     public let directions: [String]
     
+    public var displayName: String {
+        switch type {
+        case 0, 1:
+            return( longName )
+        case 2, 3, 4:
+            return( "\(shortName)-\(longName)")
+        default:
+            return "Invalid Route Type:\(type)"
+        }
+    }
+    
     init( source: JXObject ) {
         self.id = source.id
         guard let attributes = source.attributes as? Attributes else {

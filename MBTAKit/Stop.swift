@@ -28,6 +28,13 @@ public class Stop: NSObject {
     public let name: String
     public let coordinate: CLLocationCoordinate2D
     
+    public let address: String?
+    public let descr: String?
+    public let locationType: Int
+    public let platformCode: String?
+    public let platformName: String?
+    
+    
     // Optional
     public var parentID: String?
     //public var parentStop: Stop?
@@ -40,8 +47,15 @@ public class Stop: NSObject {
         
         self.name = attributes.name
         self.coordinate = CLLocationCoordinate2DMake(attributes.latitude, attributes.longitude)
-        
         self.parentID = source.relatedID(key: "parent_station")
+        
+        // Optional Detailed Information
+        self.address = attributes.address
+        self.descr = attributes.description
+        self.locationType = attributes.location_type
+        self.platformCode = attributes.platform_code
+        self.platformName = attributes.platform_name
+        
         
         super.init()
     }

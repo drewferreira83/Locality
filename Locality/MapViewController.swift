@@ -20,6 +20,8 @@ protocol MapManager {
     func add( marks: [Mark])
     func removeMarks(ofKind: Mark.Kind)
     func removeAllMarks()
+    
+    func show(view: UIView)
 }
 
 class MapViewController: UIViewController, MapManager {
@@ -98,6 +100,12 @@ class MapViewController: UIViewController, MapManager {
         let annotations = mapView.annotations
         DispatchQueue.main.async {
             self.mapView.removeAnnotations(annotations)
+        }
+    }
+    
+    func show( view: UIView ) {
+        DispatchQueue.main.async {
+            self.view.addSubview(view)
         }
     }
 }

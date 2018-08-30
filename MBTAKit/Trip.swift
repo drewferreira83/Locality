@@ -13,6 +13,7 @@ public class Trip: NSObject {
     let dir: Int
     let headsign: String
     let accessible: Int
+    let name: String
     
     let routeID: String
     var route: Route!
@@ -34,10 +35,13 @@ public class Trip: NSObject {
         self.dir = attributes.direction_id
         self.headsign = attributes.headsign
         self.accessible = attributes.wheelchair_accessible
+        self.name = attributes.name
+        
         guard let routeID = source.relatedID( key: "route" ) else {
             fatalError( "Trip source did not have Route ID. \(source)")
         }
         self.routeID = routeID
+        
         super.init()
     }
     
