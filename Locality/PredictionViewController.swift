@@ -11,20 +11,17 @@ import UIKit
 class PredictionViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
 
     @IBOutlet weak var predictionTable: UITableView!
-    @IBOutlet weak var navBar: UINavigationBar!
+    @IBAction func dismissView( sender: Any? ) {
+    }
     var predictions: [Prediction]!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
-
-        // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-        // self.navigationItem.rightBarButtonItem = self.editButtonItem
+print( "Predcition View Did Load" )
+        navigationItem.backBarButtonItem = UIBarButtonItem(barButtonSystemItem: .stop, target: nil, action: nil)
         
-        predictionTable.delegate = self
-        predictionTable.dataSource = self
-    }
+        view.layer.shadowOpacity = 0.4
+   }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -57,7 +54,20 @@ class PredictionViewController: UIViewController, UITableViewDelegate, UITableVi
         guard predictions != nil else {
             fatalError( "PredictionView does not have any predictions!")
         }
-        super.viewWillAppear(animated)
+        
+        print( " View Will appear." )
+        print( "Old frame = \(view.frame)")
+        //view.frame = preferredFrame()
+        print( "new frame = \(view.frame)")
+        super.viewWillAppear(true)
+        /*
+       let endFrame = self.preferredFrame()
+        
+        // Start with the window off screen then animate it up.
+        let startFrame = self.view.frame.offsetBy(dx: 0, dy: UIScreen.main.bounds.height)
+        self.view.frame = startFrame
+        UIView.animate(withDuration: 0.5, animations: {self.view.frame = endFrame} )
+*/
     }
     
     /*
@@ -69,5 +79,29 @@ class PredictionViewController: UIViewController, UITableViewDelegate, UITableVi
         // Pass the selected object to the new view controller.
     }
     */
+    
+    fileprivate func dismissAnimated() {
+        let endFrame = self.view.frame.offsetBy(dx: 0, dy: UIScreen.main.bounds.height)
 
+        UIView.animate(withDuration: 0.5,
+                       animations: {self.view.frame = endFrame},
+                       completion:
+            {(finished: Bool) in
+                if finished {
+                    self.view.removeFromSuperview()
+                }});
+    }
+    
+    fileprivate func preferredFrame() -> CGRect {
+        let preferredHeight: CGFloat = 250
+        let preferredWidth = min( UIScreen.main.bounds.width, 800 )
+        
+        let newSize = CGSize(width: preferredWidth, height: preferredHeight)
+        
+        let newX = (UIScreen.main.bounds.width - preferredWidth) / 2
+        let parentHeight = parent?.view.frame.height ?? UIScreen.main.bounds.height
+        let newOrigin = CGPoint(x: newX, y: parentHeight - preferredHeight)
+        
+        return(CGRect(origin: newOrigin, size: newSize ))
+    }
 }

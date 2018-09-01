@@ -16,25 +16,18 @@ protocol LocationListener {
     func locationChanged(coordinate: CLLocationCoordinate2D)
 }
 
-//  Current priorities:
-//    signifcant is prefered over standard.
-enum LocationTrigger: Int {
-    case standard, significant, once, never
-}
-
 class LocationService: NSObject, CLLocationManagerDelegate {
     //public static let share = LocationService()
 
     fileprivate var locMgr = CLLocationManager()
-    fileprivate var userLocation: CLLocation!
-    fileprivate var trigger = LocationTrigger.never
     
     fileprivate var lastLocation: CLLocation?
     
     public let listener: LocationListener!
     
-    public var here: CLLocationCoordinate2D {
-        get { return locMgr.location?.coordinate ?? Default.Map.center }
+    
+    public var userLocation: CLLocationCoordinate2D {
+        get { return lastLocation?.coordinate ?? Default.Map.center }
     }
 
     public var isEnabled: Bool {
@@ -50,7 +43,7 @@ class LocationService: NSObject, CLLocationManagerDelegate {
     
     init( listener: LocationListener ) {
         self.listener = listener
-        userLocation = locMgr.location
+        lastLocation = locMgr.location
         super.init()
 
         locMgr.delegate = self
@@ -109,7 +102,7 @@ class LocationService: NSObject, CLLocationManagerDelegate {
 
         if (lastLocation == nil) || (lastLocation! != newLocation) {
             lastLocation = newLocation
-            listener.locationChanged(coordinate: userLocation.coordinate)
+            listener.locationChanged(coordinate: newLocation.coordinate)
         }
    }
     

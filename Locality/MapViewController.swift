@@ -21,7 +21,7 @@ protocol MapManager {
     func removeMarks(ofKind: Mark.Kind)
     func removeAllMarks()
     
-    func show(view: UIView)
+    func show( predictions: Query)
 }
 
 class MapViewController: UIViewController, MapManager {
@@ -103,10 +103,25 @@ class MapViewController: UIViewController, MapManager {
         }
     }
     
-    func show( view: UIView ) {
+    func show(predictions query: Query ) {
+        
         DispatchQueue.main.async {
-            self.view.addSubview(view)
+            // Display Prediction View with predictions data.
+            let predictionViewController = (UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "PredictionViewController") as! PredictionViewController)
+            
+            guard let stop = query.data as? Stop else {
+                fatalError( "ResponseHandler couldn't get original Stop data from prediction response." )
+            }
+            guard let predictions = query.response as? [Prediction] else {
+                fatalError( "Prediction Response did not have array of predictions. \(query)")
+            }
+            
+            predictionViewController.predictions = predictions
+            predictionViewController.title = stop.name
+            
+            self.view.addSubview(predictionViewController.view)
         }
+    
     }
 }
 

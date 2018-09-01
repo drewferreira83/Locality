@@ -63,12 +63,8 @@ extension Locality {
                 fatalError( "/predictions returned something unexpected." )
             }
             
-            // Display Prediction View with predictions data.
-            let predictionView = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "PredictionViewController") as! PredictionViewController
-            
-            predictionView.predictions = predictions
-            
-            map.show(view: predictionView.view)
+            map.show( predictions: query )
+
             
             
         default:
