@@ -30,9 +30,10 @@ public class Prediction: NSObject {
     public let vehicleID: String?
 
     // The route, stop, and trip must be created by looking in the included data of the JXTop object
-    public var route: Route!
-    public var stop: Stop!
-    public var trip: Trip!
+    public var route = Route.Unknown
+    
+    public var stop = Stop.Unknown
+    public var trip = Trip.Unknown
     public var vehicle: Vehicle?
     
     public var arrival: Date?
@@ -80,29 +81,29 @@ public class Prediction: NSObject {
 
         // Vehicle ID is not required.
         self.vehicleID = source.relatedID(key: "vehicle")
-    
-        
-        // INCLUDED DATA must include Route Stop and Trip.  May include vehicle.
-        // Now create and store Route, Stop, and Trip info
-        guard let jxRouteObject = included.search(forKind: .route, id: routeID) else {
-            fatalError( "Prediction did not include route data. \(source.id)")
+
+        // Fill in the Stop, Trip, Route and Vehicle from the included data (if it exists).
+        //
+        if let jxStopData = included.search(forKind: .stop, id: stopID) {
+            stop = Stop( source: jxStopData )
+        } else {
+            print( "Unknown Stop '\(stopID)' for prediction \(id)")
         }
-        route = Route( source: jxRouteObject )
-        
-        guard let jxStopObject = included.search(forKind: .stop, id: stopID) else {
-            fatalError( "Prediction did not include stop data. \(source.id)")
+        if let jxTripData = included.search(forKind: .trip, id: tripID) {
+            trip = Trip( source: jxTripData )
+        } else {
+            print( "Unknown Trip '\(tripID)' for prediction \(id)" )
         }
-        stop = Stop( source: jxStopObject )
-        
-        guard let jxTripObject = included.search(forKind: .trip, id: tripID) else {
-            fatalError( "Prediction did not include stop data. \(source.id)")
+        if let jxRouteData = included.search( forKind: .route, id: routeID ) {
+            route = Route( source: jxRouteData )
+        } else {
+            print( "Unknown Route '\(routeID)' for prediciton \(id)" )
         }
-        trip = Trip( source: jxTripObject)
-        
         // Vehicle is optional?
         if let jxVehicleObject = included.search(forKind: .vehicle, id: vehicleID ) {
             vehicle = Vehicle( source: jxVehicleObject )
         }
+
         super.init()
         
         if (vehicleID != nil) && (vehicle == nil) {
@@ -123,6 +124,10 @@ public class Prediction: NSObject {
     }
    
     public var timeDescription: String {
+        if let status = status {
+            return status
+        }
+        
         if let departure = departure {
             return departure.minutesFromNow()
         }

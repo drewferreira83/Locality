@@ -17,7 +17,4 @@ public struct Default {
         public static let region = MKCoordinateRegionMake(Map.center, Map.span)
     }
 
-    public struct Datetime {
-    
-    }
 }

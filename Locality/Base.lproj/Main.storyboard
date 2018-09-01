@@ -63,21 +63,34 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="360"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <navigationBar contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="sN9-ob-Nxy">
-                                <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
-                                <items>
-                                    <navigationItem title="Predictions" id="fb3-i3-7iP">
-                                        <barButtonItem key="backBarButtonItem" title="X" id="5mL-WY-iPU"/>
-                                        <barButtonItem key="leftBarButtonItem" systemItem="stop" id="1Ff-uG-ESD">
-                                            <connections>
-                                                <action selector="dismissView:" destination="myF-bL-R2h" id="N8e-69-3br"/>
-                                            </connections>
-                                        </barButtonItem>
-                                    </navigationItem>
-                                </items>
-                            </navigationBar>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="V3r-Qa-ULi" userLabel="Header">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="27"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Stop" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="7" translatesAutoresizingMaskIntoConstraints="NO" id="dfw-YU-Mz9" userLabel="Stop Name">
+                                        <rect key="frame" x="171" y="5" width="32.333333333333343" height="17"/>
+                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="14"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="y8t-Ir-S7j">
+                                        <rect key="frame" x="0.0" y="0.0" width="30" height="30"/>
+                                        <state key="normal" title="X"/>
+                                        <connections>
+                                            <action selector="dismissView:" destination="6tf-t9-fdb" eventType="touchUpInside" id="WSo-8j-hDK"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstItem="dfw-YU-Mz9" firstAttribute="centerX" secondItem="V3r-Qa-ULi" secondAttribute="centerX" id="6oQ-AC-gj5"/>
+                                    <constraint firstItem="y8t-Ir-S7j" firstAttribute="leading" secondItem="V3r-Qa-ULi" secondAttribute="leading" id="Qib-wI-rpR"/>
+                                    <constraint firstAttribute="height" constant="27" id="Xdn-O7-vUS"/>
+                                    <constraint firstItem="dfw-YU-Mz9" firstAttribute="centerY" secondItem="V3r-Qa-ULi" secondAttribute="centerY" id="nSb-Zl-8BR"/>
+                                    <constraint firstItem="y8t-Ir-S7j" firstAttribute="centerY" secondItem="V3r-Qa-ULi" secondAttribute="centerY" constant="1.5" id="nb7-aG-Hyq"/>
+                                </constraints>
+                            </view>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="KPp-kH-KSf">
-                                <rect key="frame" x="0.0" y="44" width="375" height="316"/>
+                                <rect key="frame" x="0.0" y="29" width="375" height="331"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="PredictionCell" id="Qf6-xn-Jen" customClass="PredictionCell" customModule="Locality" customModuleProvider="target">
@@ -134,13 +147,13 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstItem="3a1-Ui-Kvj" firstAttribute="trailing" secondItem="KPp-kH-KSf" secondAttribute="trailing" id="2io-o7-hXF"/>
-                            <constraint firstItem="sN9-ob-Nxy" firstAttribute="leading" secondItem="3a1-Ui-Kvj" secondAttribute="leading" id="5Ti-kh-qT1"/>
-                            <constraint firstItem="KPp-kH-KSf" firstAttribute="leading" secondItem="3a1-Ui-Kvj" secondAttribute="leading" id="AeB-Bi-9ze"/>
-                            <constraint firstItem="KPp-kH-KSf" firstAttribute="bottom" secondItem="3a1-Ui-Kvj" secondAttribute="bottom" constant="34" id="RqW-dJ-7gM"/>
-                            <constraint firstItem="3a1-Ui-Kvj" firstAttribute="trailing" secondItem="sN9-ob-Nxy" secondAttribute="trailing" id="X4W-Mo-E7n"/>
-                            <constraint firstItem="3a1-Ui-Kvj" firstAttribute="top" secondItem="sN9-ob-Nxy" secondAttribute="top" constant="44" id="ga9-b5-gks"/>
-                            <constraint firstItem="KPp-kH-KSf" firstAttribute="top" secondItem="sN9-ob-Nxy" secondAttribute="bottom" id="y7i-d5-iO1"/>
+                            <constraint firstItem="KPp-kH-KSf" firstAttribute="top" secondItem="V3r-Qa-ULi" secondAttribute="bottom" constant="2" id="6IS-Dy-1q5"/>
+                            <constraint firstItem="3a1-Ui-Kvj" firstAttribute="top" secondItem="V3r-Qa-ULi" secondAttribute="top" constant="44" id="Lid-6M-fq6"/>
+                            <constraint firstItem="3a1-Ui-Kvj" firstAttribute="trailing" secondItem="KPp-kH-KSf" secondAttribute="trailing" id="OaC-PS-2Qd"/>
+                            <constraint firstItem="V3r-Qa-ULi" firstAttribute="leading" secondItem="3a1-Ui-Kvj" secondAttribute="leading" id="Qif-6d-Qcj"/>
+                            <constraint firstItem="KPp-kH-KSf" firstAttribute="bottom" secondItem="3a1-Ui-Kvj" secondAttribute="bottom" constant="34" id="eM0-P9-kze"/>
+                            <constraint firstItem="3a1-Ui-Kvj" firstAttribute="trailing" secondItem="V3r-Qa-ULi" secondAttribute="trailing" id="mUp-Z2-BKu"/>
+                            <constraint firstItem="KPp-kH-KSf" firstAttribute="leading" secondItem="3a1-Ui-Kvj" secondAttribute="leading" id="z4N-Ar-3aw"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="3a1-Ui-Kvj"/>
                     </view>
@@ -150,6 +163,7 @@
                     <size key="freeformSize" width="375" height="360"/>
                     <connections>
                         <outlet property="predictionTable" destination="KPp-kH-KSf" id="Pnu-Mi-XcS"/>
+                        <outlet property="titleLabel" destination="dfw-YU-Mz9" id="P9j-Ab-rfG"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="myF-bL-R2h" userLabel="First Responder" sceneMemberID="firstResponder"/>

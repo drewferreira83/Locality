@@ -11,6 +11,8 @@ import MapKit
 
 // This class is created from data extracted from the MBTA's JSON response.  This is the data that is available to the outside world in a flatter form.
 public class Stop: NSObject {
+    public static let Unknown = Stop()
+    
     public struct Attributes: Decodable {
         let address: String?
         let description: String?
@@ -38,6 +40,19 @@ public class Stop: NSObject {
     // Optional
     public var parentID: String?
     //public var parentStop: Stop?
+    
+    override private init() {
+        id = "stop.unknown"
+        name = "unknown Stop"
+        coordinate = Default.Map.center
+        locationType = -1
+        address = nil
+        descr = "Unknown Stop"
+        platformCode = nil
+        platformName = nil
+        parentID = nil
+        super.init()
+    }
     
     init( source: JXObject ) {
         self.id = source.id

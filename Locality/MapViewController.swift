@@ -119,7 +119,7 @@ class MapViewController: UIViewController, MapManager {
         }
         
         DispatchQueue.main.async {
-            self.predictionViewController.title = stop.name
+            self.predictionViewController.titleLabel.text = stop.name
             self.predictionViewController.predictions = predictions
             self.predictionViewController.showAnimated()
         }

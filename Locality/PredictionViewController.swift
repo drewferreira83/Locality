@@ -10,6 +10,7 @@ import UIKit
 
 class PredictionViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
 
+    @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var predictionTable: UITableView!
     @IBAction func dismissView( _ sender: AnyObject ) {
         dismissAnimated()

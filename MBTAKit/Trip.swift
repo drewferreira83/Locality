@@ -9,6 +9,8 @@
 import Foundation
 
 public class Trip: NSObject {
+    public static let Unknown = Trip()
+    
     let id: String
     let dir: Int
     let headsign: String
@@ -25,7 +27,20 @@ public class Trip: NSObject {
         let name: String
         let wheelchair_accessible: Int
     }
+    
+    override private init() {
+        id = "trip.unknown"
+        dir = -1
+        headsign = "Unknown Trip"
+        accessible = -1
+        name = "Unknown Trip"
+        routeID = "UnknownTrip.RouteID"
+        route = Route.Unknown
+        
+        super.init()
+    }
 
+    
     init( source: JXObject ) {
         guard let attributes = source.attributes as? Attributes else {
             fatalError( "Trip could not interpret attributes. \(source) ")

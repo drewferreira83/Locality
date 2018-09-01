@@ -10,6 +10,7 @@ import Foundation
 import UIKit
 
 public class Route: NSObject {
+    public static let Unknown = Route()
     
     public struct Attributes: Decodable {
         let color: String
@@ -40,6 +41,18 @@ public class Route: NSObject {
         default:
             return "Invalid Route Type:\(type)"
         }
+    }
+    
+    override private init() {
+        id = "UnknownRoute"
+        about = "Unknown Route"
+        type = -1
+        shortName = "Route?"
+        longName = "Unknown Route"
+        color = UIColor.lightGray
+        textColor = UIColor.red
+        directions = ["Unknown Source", "Unknown Sink"]
+        super.init()
     }
     
     init( source: JXObject ) {
