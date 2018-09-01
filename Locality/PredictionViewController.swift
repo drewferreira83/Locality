@@ -11,16 +11,35 @@ import UIKit
 class PredictionViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
 
     @IBOutlet weak var predictionTable: UITableView!
-    @IBAction func dismissView( sender: Any? ) {
+    @IBAction func dismissView( _ sender: AnyObject ) {
+        dismissAnimated()
     }
-    var predictions: [Prediction]!
+    
+    var offScreenFrame: CGRect!
+    var onScreenFrame: CGRect!
+    var onScreen = false
+    
+    fileprivate var _predictions = [Prediction]()
+    var predictions: [Prediction] {
+        get {
+            return _predictions
+        }
+        
+        set (value) {
+            _predictions = value
+            if onScreen {
+                predictionTable.reloadData()
+            }
+        }
+    }
     
     override func viewDidLoad() {
-        super.viewDidLoad()
-print( "Predcition View Did Load" )
-        navigationItem.backBarButtonItem = UIBarButtonItem(barButtonSystemItem: .stop, target: nil, action: nil)
-        
         view.layer.shadowOpacity = 0.4
+        onScreenFrame = preferredFrame()
+        offScreenFrame = onScreenFrame.offsetBy(dx: 0, dy: UIScreen.main.bounds.height)
+        view.frame = offScreenFrame
+        
+        super.viewDidLoad()
    }
 
     override func didReceiveMemoryWarning() {
@@ -50,26 +69,6 @@ print( "Predcition View Did Load" )
         return cell
     }
 
-    override func viewWillAppear(_ animated: Bool) {
-        guard predictions != nil else {
-            fatalError( "PredictionView does not have any predictions!")
-        }
-        
-        print( " View Will appear." )
-        print( "Old frame = \(view.frame)")
-        //view.frame = preferredFrame()
-        print( "new frame = \(view.frame)")
-        super.viewWillAppear(true)
-        /*
-       let endFrame = self.preferredFrame()
-        
-        // Start with the window off screen then animate it up.
-        let startFrame = self.view.frame.offsetBy(dx: 0, dy: UIScreen.main.bounds.height)
-        self.view.frame = startFrame
-        UIView.animate(withDuration: 0.5, animations: {self.view.frame = endFrame} )
-*/
-    }
-    
     /*
     // MARK: - Navigation
 
@@ -80,16 +79,17 @@ print( "Predcition View Did Load" )
     }
     */
     
-    fileprivate func dismissAnimated() {
-        let endFrame = self.view.frame.offsetBy(dx: 0, dy: UIScreen.main.bounds.height)
-
+    public func dismissAnimated() {
         UIView.animate(withDuration: 0.5,
-                       animations: {self.view.frame = endFrame},
-                       completion:
-            {(finished: Bool) in
-                if finished {
-                    self.view.removeFromSuperview()
-                }});
+                       animations: {self.view.frame = self.offScreenFrame})
+        onScreen = false
+    }
+    
+    public func showAnimated() {
+        UIView.animate(withDuration: 0.5,
+                       animations: {self.view.frame = self.onScreenFrame})
+        onScreen = true
+        predictionTable.reloadData()
     }
     
     fileprivate func preferredFrame() -> CGRect {

@@ -33,8 +33,15 @@ class MapViewController: UIViewController, MapManager {
         locality.refreshStops()
     }
     
+    var predictionViewController: PredictionViewController!
+    
     override func viewDidLoad() {
+        predictionViewController = (UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "PredictionViewController") as! PredictionViewController)
+        
         super.viewDidLoad()
+
+        addChildViewController(predictionViewController)
+        view.addSubview(predictionViewController.view)
 
         mapView.setRegion(Default.Map.region, animated: false)
         
@@ -104,24 +111,18 @@ class MapViewController: UIViewController, MapManager {
     }
     
     func show(predictions query: Query ) {
+        guard let stop = query.data as? Stop else {
+            fatalError( "ResponseHandler couldn't get original Stop data from prediction response." )
+        }
+        guard let predictions = query.response as? [Prediction] else {
+            fatalError( "Prediction Response did not have array of predictions. \(query)")
+        }
         
         DispatchQueue.main.async {
-            // Display Prediction View with predictions data.
-            let predictionViewController = (UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "PredictionViewController") as! PredictionViewController)
-            
-            guard let stop = query.data as? Stop else {
-                fatalError( "ResponseHandler couldn't get original Stop data from prediction response." )
-            }
-            guard let predictions = query.response as? [Prediction] else {
-                fatalError( "Prediction Response did not have array of predictions. \(query)")
-            }
-            
-            predictionViewController.predictions = predictions
-            predictionViewController.title = stop.name
-            
-            self.view.addSubview(predictionViewController.view)
+            self.predictionViewController.title = stop.name
+            self.predictionViewController.predictions = predictions
+            self.predictionViewController.showAnimated()
         }
-    
     }
 }
 
