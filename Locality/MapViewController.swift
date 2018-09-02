@@ -22,19 +22,20 @@ protocol MapManager {
     func removeAllMarks()
     
     func show( predictions: Query)
+    func hidePredictions()
 }
 
 class MapViewController: UIViewController, MapManager {
-
-    var locality: Locality!
     @IBOutlet weak var mapView: MKMapView!
     @IBAction func reload(_ sender: Any) {
         // Request should go to Locality object
         locality.refreshStops()
     }
     
+
     var predictionViewController: PredictionViewController!
-    
+    var locality: Locality!
+
     override func viewDidLoad() {
         predictionViewController = (UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "PredictionViewController") as! PredictionViewController)
         
@@ -109,8 +110,14 @@ class MapViewController: UIViewController, MapManager {
             self.mapView.removeAnnotations(annotations)
         }
     }
+
+    func hidePredictions() {
+        DispatchQueue.main.async {
+            self.predictionViewController.dismissAnimated()
+        }
+    }
     
-    func show(predictions query: Query ) {
+    func show(predictions query: Query) {
         guard let stop = query.data as? Stop else {
             fatalError( "ResponseHandler couldn't get original Stop data from prediction response." )
         }

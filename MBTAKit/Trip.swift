@@ -28,6 +28,11 @@ public class Trip: NSObject {
         let wheelchair_accessible: Int
     }
     
+    private var _isUnknown = false
+    public var isUnknown: Bool {
+        return _isUnknown
+    }
+
     override private init() {
         id = "trip.unknown"
         dir = -1
@@ -36,7 +41,7 @@ public class Trip: NSObject {
         name = "Unknown Trip"
         routeID = "UnknownTrip.RouteID"
         route = Route.Unknown
-        
+        _isUnknown = true
         super.init()
     }
 

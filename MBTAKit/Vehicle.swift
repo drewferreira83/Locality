@@ -10,6 +10,8 @@ import Foundation
 import MapKit
 
 public class Vehicle: NSObject {
+    public static let Unknown = Vehicle()
+    
     struct Attributes: Decodable {
         let bearing: Int?
         let current_status: String
@@ -39,7 +41,29 @@ public class Vehicle: NSObject {
     public var route: Route?
     public var stop: Stop?
     public var trip: Trip?
+
+    private var _isUnknown = false
+    public var isUnknown: Bool {
+        return _isUnknown
+    }
     
+    override private init() {
+        self.id = "UnknownVehicle"
+        self.coordinate = Default.Map.center
+        self.directionID = nil
+        self.bearing = nil
+        self.status = nil
+        self.speed = nil
+        self.stopSequence = nil
+        self.updated = nil
+        self.routeID = nil
+        self.stopID = nil
+        self.tripID = nil
+        self.route = Route.Unknown
+        self.stop = Stop.Unknown
+        self.trip = Trip.Unknown
+        self._isUnknown = true
+    }
     
     init( source: JXObject ) {
         guard let attributes = source.attributes as? Attributes else {

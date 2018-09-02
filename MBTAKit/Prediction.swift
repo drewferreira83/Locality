@@ -8,7 +8,6 @@
 
 import Foundation
 
-//
 public class Prediction: NSObject {
     
     public struct Attributes: Decodable {
@@ -61,7 +60,6 @@ public class Prediction: NSObject {
         if let datetime = attributes.departure_time {
             departure = DateFactory.make(datetime:datetime)
         }
-    
         
         // PREDICTION object MUST include ROUTE STOP and TRIP ids.
         guard let routeID = source.relatedID( key: "route" ) else {
@@ -83,7 +81,8 @@ public class Prediction: NSObject {
         self.vehicleID = source.relatedID(key: "vehicle")
 
         // Fill in the Stop, Trip, Route and Vehicle from the included data (if it exists).
-        //
+        // TripID is invalid for Green Line Trains east of Park.
+        // Some shuttles or unscheduled trips don't have all of this data.
         if let jxStopData = included.search(forKind: .stop, id: stopID) {
             stop = Stop( source: jxStopData )
         } else {
@@ -107,6 +106,7 @@ public class Prediction: NSObject {
         super.init()
         
         if (vehicleID != nil) && (vehicle == nil) {
+            // Haven't encountered this...
             print( "Note:  Prediction has vehicleID, but did not include vehicle data. \(self)")
         }
     }
@@ -120,7 +120,32 @@ public class Prediction: NSObject {
     }
     
     public var directionDescription: String {
-        return "\(route.directions[dir]) to \(trip.headsign)"
+        if route.isUnknown {
+            // Haven't encountered this situation
+            return ""
+        }
+
+        var toDescription: String = ""
+        
+        if trip.isUnknown {
+            // For Green Line trains east of Park, the tripID is invalid.
+            switch (route.id) {
+            case "Green-B":
+                toDescription = " towards Boston College"
+            case "Green-C":
+                toDescription = " towards Cleveland Circle"
+            case "Green-D":
+                toDescription = " towards Riverside"
+            case "Green-E":
+                toDescription = " towards Heath St"
+            default:
+                break
+            }
+        } else {
+            toDescription = " to \(trip.headsign)"
+        }
+        
+        return route.directions[dir] + toDescription
     }
    
     public var timeDescription: String {
@@ -140,7 +165,7 @@ public class Prediction: NSObject {
     }
     
     override public var description: String {
-         return "[PRE:\(route.displayName) \(directionDescription)" +
+         return "[PRE:\(route.fullName) \(directionDescription)" +
                "\n   \(timeDescription) \(predictionStatus) \(vehicleStatus)]"
     }
 }

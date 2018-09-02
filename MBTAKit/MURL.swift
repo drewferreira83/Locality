@@ -49,12 +49,17 @@ class MURL {
             fatalError( "Stops query requires an ID or region. Data=\(String(describing:query.data))" )
             
         case .routes:
-            // Routes takes either no arg or an id
+            // If Data is nil, return all routes
+            // If Data is a string, return route with that ID
+            // if Data is a stop, return routes at that stop
             baseString.append( "/routes" )
             baseString.append( MBTA_KEY )
             baseString.append("&sort=sort_order")
             if let routeID = query.data as? String {
                 baseString.append( "&filter[id]=\(routeID)" )
+            }
+            if let stop = query.data as? Stop {
+                baseString.append( "&filter[stop]=\(stop.id)")
             }
 
         case .trips:
@@ -106,7 +111,7 @@ class MURL {
             baseString.append( MBTA_KEY )
             
             if let stop = query.data as? Stop {
-                baseString.append( "&sort=departure_time")
+                baseString.append( "&sort=departure_time,arrival_time")
                 baseString.append( "&include=route,stop,trip,vehicle" )
                 baseString.append( "&filter[stop]=\(stop.id)")
                 break

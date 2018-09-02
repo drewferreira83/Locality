@@ -13,6 +13,7 @@ class PredictionViewController: UIViewController, UITableViewDelegate, UITableVi
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var predictionTable: UITableView!
     @IBAction func dismissView( _ sender: AnyObject ) {
+        print( "DismissView!")
         dismissAnimated()
     }
     
@@ -63,7 +64,7 @@ class PredictionViewController: UIViewController, UITableViewDelegate, UITableVi
         let cell = tableView.dequeueReusableCell(withIdentifier: "PredictionCell", for: indexPath) as! PredictionCell
 
         let prediction = predictions[ indexPath.row ]
-        cell.titleLabel.text = prediction.route.displayName
+        cell.titleLabel.text = prediction.route.fullName
         cell.subtitleLabel.text = prediction.directionDescription
         cell.timeFieldLabel.text = prediction.timeDescription
 

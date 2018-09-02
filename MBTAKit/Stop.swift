@@ -9,7 +9,8 @@
 import Foundation
 import MapKit
 
-// This class is created from data extracted from the MBTA's JSON response.  This is the data that is available to the outside world in a flatter form.
+// This class is created from data extracted from the MBTA's JSON response.
+// This is the data that is available to the outside world in a flatter form.
 public class Stop: NSObject {
     public static let Unknown = Stop()
     
@@ -36,6 +37,10 @@ public class Stop: NSObject {
     public let platformCode: String?
     public let platformName: String?
     
+    fileprivate var _isUnknown = false
+    public var isUnknown: Bool {
+        return _isUnknown
+    }
     
     // Optional
     public var parentID: String?
@@ -43,7 +48,7 @@ public class Stop: NSObject {
     
     override private init() {
         id = "stop.unknown"
-        name = "unknown Stop"
+        name = "Unknown Stop"
         coordinate = Default.Map.center
         locationType = -1
         address = nil
@@ -51,6 +56,7 @@ public class Stop: NSObject {
         platformCode = nil
         platformName = nil
         parentID = nil
+        _isUnknown = true
         super.init()
     }
     

@@ -10,6 +10,16 @@ import Foundation
 import UIKit
 
 public class Route: NSObject {
+    public enum Mode: Int {
+        case unknown = -1
+
+        case lightRail = 0
+        case heavyRail = 1
+        case commuterRail = 2
+        case bus = 3
+        case ferry = 4
+    }
+    
     public static let Unknown = Route()
     
     public struct Attributes: Decodable {
@@ -25,33 +35,78 @@ public class Route: NSObject {
     
     public let id: String
     public let about: String
-    public let type: Int
+    public let type: Mode
     public let shortName: String
     public let longName: String
     public let color: UIColor
     public let textColor: UIColor
     public let directions: [String]
     
-    public var displayName: String {
+    // Full Name is a user readable string that completely declares the route.
+    public var fullName: String {
         switch type {
-        case 0, 1:
+        case .lightRail, .heavyRail:
             return( longName )
-        case 2, 3, 4:
+        case .bus, .commuterRail, .ferry:
             return( "\(shortName)-\(longName)")
         default:
             return "Invalid Route Type:\(type)"
         }
     }
     
+    // Abbreviation is the shortest user readable string to identify this route.
+    //  For bus, it is the id
+    //  For heavyRail, it is the color, which currently is the ID.
+    //  For lightRail, it is the shortName (B,C,D,E), except for Mattapan Trolley
+    //  For Ferry, it is the first part of the long name
+    //  For CR, it is the outer terminus, which currently is what follows the first "-"
+    public var abbreviation: String {
+        switch type {
+        case .bus, .lightRail:
+            if id == "Mattapan" {
+                return "Mattapan"
+            }
+            return shortName
+            
+        case .heavyRail:
+            return id
+            
+        case .commuterRail:
+            if let dashIndex = id.index(of: "-") {
+                let afterIndex = id.index(after: dashIndex)
+                return String(id[afterIndex...])
+            }
+
+            print( ".commuterRail ID not in expected form. \(self)")
+            return id
+
+        case .ferry:
+            if let index = longName.index(of: " ") {
+                return String(longName[..<index])
+            }
+            print( ".ferry ID not in expected form. \(self)")
+            return longName
+            
+        default:
+            return "UNK"
+        }
+    }
+    
+    private var _isUnknown = false
+    public var isUnknown: Bool {
+        return _isUnknown
+    }
+    
     override private init() {
         id = "UnknownRoute"
         about = "Unknown Route"
-        type = -1
+        type = Mode.unknown
         shortName = "Route?"
         longName = "Unknown Route"
         color = UIColor.lightGray
         textColor = UIColor.red
         directions = ["Unknown Source", "Unknown Sink"]
+        _isUnknown = true
         super.init()
     }
     
@@ -62,7 +117,7 @@ public class Route: NSObject {
         }
         
         self.about = attributes.description
-        self.type = attributes.type
+        self.type = Mode( rawValue: attributes.type ) ?? .unknown
         self.color = UIColor( hex: attributes.color )
         self.textColor = UIColor( hex: attributes.text_color)
         self.shortName = attributes.short_name

@@ -44,20 +44,22 @@ extension MapViewController: MKMapViewDelegate {
     public func mapView(_ mapView: MKMapView, didDeselect view: MKAnnotationView) {
         // For the custom annotation views, send the callout away.
         if let markView = view as? MarkView {
-            // Inform the core.
-            print( "Deselected \(markView.description)")
-            //didDeselect( markView: markView )
+            if let mark = markView.mark {
+                locality.didDeselect( mark: mark )
+            }
         }
     }
+
     
     //  Tapping on the simple bubble on an anno will trigger the detail to appear at the bottom of the screen.
     public func mapView(_ mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
         if let markView = view as? MarkView {
-            print( "Do display Detail for \(markView.description)")
-            // displayDetailView(for: markView )
+            if let mark = markView.mark {
+                locality.didSelectDetail( mark: mark )
+            }
         }
     }
-    
+
     // Need to turn off the callout for the User Location annotation view.
     // Can only change it here for some reason.
     public func mapView(_ mapView: MKMapView, didAdd views: [MKAnnotationView]) {
@@ -68,6 +70,29 @@ extension MapViewController: MKMapViewDelegate {
 }
 
 extension Locality {
+    func didDeselect( mark: Mark ) {
+        // dismiss the prediction window.
+        map.hidePredictions()
+        
+    }
+    
+    func didSelectDetail( mark: Mark ) {
+        switch mark.kind {
+        case .stop:
+            guard let stop = mark.stop else {
+                fatalError( "No Stop data for Mark \(mark)" )
+            }
+            
+            // Get predictions
+            let query =  Query(kind: .predictions, data: stop )
+            handler.deliver(query: query)
+            
+        default:
+            print( "Selected detail of \(mark), but ignored" )
+        }
+    }
+    
+    
     func didSelect( mark: Mark ) {
         
         switch mark.kind {
@@ -75,8 +100,9 @@ extension Locality {
             guard let stop = mark.stop else {
                 fatalError( "No Stop data for Mark \(mark)")
             }
-            // Get predictions at this stop.
-            let query = Query(kind: .predictions, data: stop)
+
+            // Get Routes at this stop.
+            let query = Query( kind: .routes, data: stop )
             handler.deliver(query: query)
             
         default:

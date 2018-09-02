@@ -29,16 +29,14 @@ open class Query: Hashable, CustomStringConvertible {
     // Do not confuse with JXObject.Kind
     public enum Kind: String {
         case alert
-        case predictions
-        case routes
+        case predictions // Stop
+        case routes      // All, ID, or atStop
         case schedules
-        case stops
+        case stops       // Coordinate
         case trips
         case vehicles
         
-        case outstanding
-
-        case error
+        case outstanding  // Check queries that haven't returned.
     }
     
     public let kind: Kind

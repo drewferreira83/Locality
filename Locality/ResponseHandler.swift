@@ -40,6 +40,7 @@ extension Locality {
             }
             for route in routes {
                 routeDict[route.id] = route
+                print( "\(route.id) = \(route.abbreviation)" )
             }
             print( "Loaded \(routeDict.count) routes")
             
