@@ -27,9 +27,11 @@ class MURL {
         case .stops:
             baseString.append( "/stops")
             baseString.append( MBTA_KEY )
+            baseString.append( "&sort=location_type" )
             baseString.append( "&include=parent_station" )
 
             // If there is a region, use the center and get nearby stops
+            // Sorting by location type returns stops first, then stations (entrances are ignored)
             if let region = query.data as? MKCoordinateRegion {
                 let center = region.center
                 let radius = region.maxDelta

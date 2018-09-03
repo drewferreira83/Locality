@@ -19,10 +19,15 @@ protocol MapManager {
     
     func add( marks: [Mark])
     func removeMarks(ofKind: Mark.Kind)
-    func removeAllMarks()
+    func getMarks(ofKind: Mark.Kind) -> [Mark]
     
     func show( predictions: Query)
     func hidePredictions()
+    
+    // showDetail( predictions:)
+    // showDetail( routes: )
+    // showDetail( vehicle: )
+    
 }
 
 class MapViewController: UIViewController, MapManager {
@@ -84,33 +89,31 @@ class MapViewController: UIViewController, MapManager {
     }
     
     func add( marks: [Mark] ) {
-       DispatchQueue.main.async {
+        DispatchQueue.main.async {
             self.mapView.addAnnotations(marks)
         }
     }
     
     func removeMarks(ofKind: Mark.Kind) {
-        var matchingMarks = [Mark]()
-        for annotation in mapView.annotations {
-            if let mark = annotation as? Mark {
-                if mark.kind == ofKind  {
-                    matchingMarks.append( mark )
-                }
-            }
-        }
-        
+        let matchingMarks = getMarks(ofKind: ofKind)
         DispatchQueue.main.async {
             self.mapView.removeAnnotations(matchingMarks)
         }
     }
     
-    func removeAllMarks() {
-        let annotations = mapView.annotations
-        DispatchQueue.main.async {
-            self.mapView.removeAnnotations(annotations)
+    func getMarks(ofKind: Mark.Kind) -> [Mark]{
+        var matchingMarks = [Mark]()
+        for annotation in mapView.annotations {
+            if let mark = annotation as? Mark {
+                if ofKind == .all || ofKind == mark.kind {
+                    matchingMarks.append( mark )
+                }
+            }
         }
+        
+        return matchingMarks
     }
-
+    
     func hidePredictions() {
         DispatchQueue.main.async {
             self.predictionViewController.dismissAnimated()

@@ -30,6 +30,8 @@ extension Locality {
                     marks.append(Mark(stop: stop))
                 }
             }
+            
+            // Remove old stops.
             map.removeMarks(ofKind: .stop)
             map.add(marks: marks)
             

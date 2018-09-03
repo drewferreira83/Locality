@@ -50,11 +50,13 @@ class MarkView: MKAnnotationView {
         
         switch (mark.kind) {
         case .stop:
-            newImage = #imageLiteral(resourceName: "stop") // default
+            newImage = (mark.stop!.locationType == .station) ? #imageLiteral(resourceName: "station") : #imageLiteral(resourceName: "stop")
             
         case .vehicle:
             newImage = #imageLiteral(resourceName: "chevron")
             newImage = newImage.rotate( byDegrees: mark.rotation)
+        default:
+            break
         }
         self.image = newImage
     }

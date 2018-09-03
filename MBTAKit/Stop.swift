@@ -33,7 +33,7 @@ public class Stop: NSObject {
     
     public let address: String?
     public let descr: String?
-    public let locationType: Int
+    public let locationType: GTFS.LocationType
     public let platformCode: String?
     public let platformName: String?
     
@@ -50,7 +50,7 @@ public class Stop: NSObject {
         id = "stop.unknown"
         name = "Unknown Stop"
         coordinate = Default.Map.center
-        locationType = -1
+        locationType = .unknown
         address = nil
         descr = "Unknown Stop"
         platformCode = nil
@@ -73,7 +73,7 @@ public class Stop: NSObject {
         // Optional Detailed Information
         self.address = attributes.address
         self.descr = attributes.description
-        self.locationType = attributes.location_type
+        self.locationType = GTFS.LocationType( rawValue: attributes.location_type) ?? .unknown
         self.platformCode = attributes.platform_code
         self.platformName = attributes.platform_name
         

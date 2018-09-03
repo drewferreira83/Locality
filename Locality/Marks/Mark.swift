@@ -12,7 +12,7 @@ import MapKit
 
 open class Mark: NSObject, MKAnnotation {
     enum Kind: String {
-        case stop, vehicle
+        case stop, vehicle, all
     }
 
     public let coordinate: CLLocationCoordinate2D
