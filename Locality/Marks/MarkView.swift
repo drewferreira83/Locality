@@ -13,7 +13,8 @@ import MapKit
 // view will be updated to correct type and rotation (if applicable)
 class MarkView: MKAnnotationView {
     static let Identifier = "MarkView"
-    
+    let routeLabel = UILabel()
+
     var mark: Mark? {
         return annotation as? Mark
     }
@@ -24,10 +25,24 @@ class MarkView: MKAnnotationView {
         isOpaque = false
         canShowCallout = true
         
-        // Make an info button and place it on the right side of the callout bubble.
-        let infoButton = UIButton(type: .infoLight)
-        rightCalloutAccessoryView = infoButton
         
+        // Make an info button and place it on the right side of the callout bubble.
+        //let infoButton = UIButton(type: .infoLight)
+        //rightCalloutAccessoryView = infoButton
+        routeLabel.font = .preferredFont(forTextStyle: .caption1)
+        routeLabel.text = "Getting routes..."
+        routeLabel.numberOfLines = 0
+        routeLabel.lineBreakMode = .byWordWrapping
+        let minWidthConstraint = NSLayoutConstraint(item: routeLabel,
+                                                    attribute: .width,
+                                                    relatedBy: .greaterThanOrEqual,
+                                                    toItem: nil,
+                                                    attribute: .notAnAttribute,
+                                                    multiplier: 1.0,
+                                                    constant: 180)
+        routeLabel.addConstraint(minWidthConstraint)
+        
+        detailCalloutAccessoryView = routeLabel
         updateImage()
     }
 

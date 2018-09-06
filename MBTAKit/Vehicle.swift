@@ -29,7 +29,7 @@ public class Vehicle: NSObject {
 
     public var directionID: Int?
     public var bearing: Int?
-    public var status: String?
+    public var status: GTFS.VehicleStatus
     public var speed: Double?
     public var stopSequence: Int?
     public var updated: Date?
@@ -52,7 +52,7 @@ public class Vehicle: NSObject {
         self.coordinate = Default.Map.center
         self.directionID = nil
         self.bearing = nil
-        self.status = nil
+        self.status = .unknown
         self.speed = nil
         self.stopSequence = nil
         self.updated = nil
@@ -74,7 +74,7 @@ public class Vehicle: NSObject {
         self.coordinate = CLLocationCoordinate2DMake(attributes.latitude, attributes.longitude)
         self.directionID = attributes.direction_id
         self.bearing = attributes.bearing
-        self.status = attributes.current_status
+        self.status = GTFS.VehicleStatus( rawValue: attributes.current_status ) ?? .unknown
         self.stopSequence = attributes.current_stop_sequence
         if let datetime = attributes.updated_at {
             self.updated = DateFactory.make(datetime: datetime)

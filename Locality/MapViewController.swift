@@ -21,11 +21,11 @@ protocol MapManager {
     func removeMarks(ofKind: Mark.Kind)
     func getMarks(ofKind: Mark.Kind) -> [Mark]
     
-    func show( predictions: Query)
+    func show( predictions: [Prediction], for stop: Stop )
     func hidePredictions()
     
     // showDetail( predictions:)
-    // showDetail( routes: )
+    func show( routes: [Route], for stop: Stop )
     // showDetail( vehicle: )
     
 }
@@ -37,10 +37,11 @@ class MapViewController: UIViewController, MapManager {
         locality.refreshStops()
     }
     
-
     var predictionViewController: PredictionViewController!
     var locality: Locality!
-
+    
+    var selectedMarkView: MarkView?
+    
     override func viewDidLoad() {
         predictionViewController = (UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "PredictionViewController") as! PredictionViewController)
         
@@ -120,19 +121,32 @@ class MapViewController: UIViewController, MapManager {
         }
     }
     
-    func show(predictions query: Query) {
-        guard let stop = query.data as? Stop else {
-            fatalError( "ResponseHandler couldn't get original Stop data from prediction response." )
-        }
-        guard let predictions = query.response as? [Prediction] else {
-            fatalError( "Prediction Response did not have array of predictions. \(query)")
-        }
-        
+    func show(predictions: [Prediction], for stop: Stop) {
         DispatchQueue.main.async {
             self.predictionViewController.titleLabel.text = stop.name
             self.predictionViewController.predictions = predictions
             self.predictionViewController.showAnimated()
         }
     }
-}
+    
+    func show( routes: [Route], for stop: Stop ) {
+        guard let markView = selectedMarkView else {
+            print( "Got routes for stop \(stop) but that MarkView is not selected." )
+            return
+        }
 
+        let listOfRoutes = NSMutableAttributedString()
+        for route in routes {
+            if listOfRoutes.length > 0 {
+                listOfRoutes.append( NSAttributedString(string: " "))
+            }
+            listOfRoutes.append(route.colorfy(string: Strings.NBSP + route.abbreviatedName + Strings.NBSP))
+        }
+        
+        DispatchQueue.main.async {
+            markView.routeLabel.attributedText = listOfRoutes
+            markView.routeLabel.layoutIfNeeded()
+        }
+    }
+
+}

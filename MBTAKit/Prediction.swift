@@ -112,7 +112,7 @@ public class Prediction: NSObject {
     }
     
     public var vehicleStatus: String {
-        return (vehicle?.status ?? "-")
+        return (vehicle?.status.rawValue ?? "-")
     }
     
     public var predictionStatus: String {

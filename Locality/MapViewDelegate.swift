@@ -35,6 +35,7 @@ extension MapViewController: MKMapViewDelegate {
     //  If you do select it programmatically, call this function also.
     public func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
         if let markView = view as? MarkView {
+            selectedMarkView = markView
             if let mark = markView.mark {
                 locality.didSelect( mark: mark )
             }
@@ -44,6 +45,10 @@ extension MapViewController: MKMapViewDelegate {
     public func mapView(_ mapView: MKMapView, didDeselect view: MKAnnotationView) {
         // For the custom annotation views, send the callout away.
         if let markView = view as? MarkView {
+            if selectedMarkView == markView {
+                selectedMarkView = nil
+            }
+            
             if let mark = markView.mark {
                 locality.didDeselect( mark: mark )
             }

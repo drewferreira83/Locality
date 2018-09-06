@@ -16,6 +16,11 @@ public struct Default {
         public static let center = CLLocationCoordinate2DMake( 42.36, -71.06 )  // Boston
         public static let region = MKCoordinateRegionMake(Map.center, Map.span)
     }
+    
+}
+
+public struct Strings {
+    public static let NBSP = "\u{00a0}"
 }
 
 public struct GTFS {
@@ -34,9 +39,18 @@ public struct GTFS {
     }
     
     public enum VehicleStatus: String {
-        case incoming = "INCOMING_AT"
-        case stopped = "STOPPED_AT"
-        case inTransit = "IN_TRANSIT_TO"
+        case incoming = "INCOMING_AT"      // Approaching station
+        case stopped = "STOPPED_AT"        // At station
+        case inTransit = "IN_TRANSIT_TO"   // Departed previous station
+        
+        case unknown = "unknown"
     }
+
+    // What to display for the previous statuses.
+    public static let VehicleStatusDescription = [
+        VehicleStatus.incoming.rawValue: "Incoming",
+        VehicleStatus.stopped.rawValue: "Stopped at",
+        VehicleStatus.inTransit.rawValue: "In Transit to" ]
+    
 }
 

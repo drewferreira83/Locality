@@ -40,11 +40,14 @@ extension Locality {
                 print("/routes returned something unexpected.")
                 return
             }
-            for route in routes {
-                routeDict[route.id] = route
-                print( "\(route.id) = \(route.abbreviation)" )
+            
+            // If these routes are for a particular stop, then display the routes.
+            if let stop = query.data as? Stop {
+                map.show(routes: routes, for: stop)
+                return
             }
-            print( "Loaded \(routeDict.count) routes")
+            
+            print( "Got /Routes, but didn't have associated stop. \(query)")
             
         case .vehicles:
             guard let vehicles = query.response as? [Vehicle] else {
@@ -61,8 +64,14 @@ extension Locality {
             map.add(marks: marks)
             print( "Displayed \(marks.count) vehicles.:")
             
-        case .predictions:           
-            map.show( predictions: query )
+        case .predictions:
+            guard let predictions = query.response as? [Prediction] else {
+                fatalError( "/predictions returned something unexpected. \(query)")
+            }
+            guard let stop = query.data as? Stop else {
+                fatalError( "Could not get Stop from prediction data. \(query)")
+            }
+            map.show( predictions: predictions, for: stop )
             
         default:
             print( "Don't know what to do with Query \(query.kind)")

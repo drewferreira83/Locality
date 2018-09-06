@@ -17,7 +17,7 @@ open class Mark: NSObject, MKAnnotation {
 
     public let coordinate: CLLocationCoordinate2D
     public let title: String?
-    public let subtitle: String?
+    public var subtitle: String?
     
     public let stop: Stop?
     public let vehicle: Vehicle?
@@ -30,7 +30,7 @@ open class Mark: NSObject, MKAnnotation {
         self.coordinate = stop.coordinate
         self.kind = .stop
         self.title = stop.name
-        self.subtitle = stop.id
+        self.subtitle = nil 
         self.stop = stop
         self.vehicle = nil
         
@@ -41,7 +41,7 @@ open class Mark: NSObject, MKAnnotation {
         self.coordinate = vehicle.coordinate
         self.kind = .vehicle
         self.title = vehicle.id
-        self.subtitle = vehicle.status
+        self.subtitle = vehicle.status.rawValue
         self.vehicle = vehicle
         self.rotation = vehicle.bearing ?? 0
         self.stop = nil
